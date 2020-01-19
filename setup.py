@@ -14,7 +14,7 @@ def read_file(filename):
 
 
 setup(
-    name=package.__name__.replace('_', '-'),
+    name='kustomize-wrapper',
     version=package.__version__,
     description=package.__doc__.strip().split('\n')[0],
     long_description=read_file('README.md'),
