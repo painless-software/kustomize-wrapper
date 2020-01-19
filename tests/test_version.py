@@ -1,10 +1,9 @@
 """
 Tests for the version module
 """
-import platform
 import pytest
 
-from cli_test_helpers import ArgvContext, EnvironContext
+from cli_test_helpers import ArgvContext
 from unittest.mock import patch
 
 import kustomize.version

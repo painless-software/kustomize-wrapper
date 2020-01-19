@@ -4,9 +4,6 @@ Tests for the command module
 import platform
 import pytest
 
-from cli_test_helpers import ArgvContext, EnvironContext
-from unittest.mock import patch
-
 import kustomize.util
 
 
