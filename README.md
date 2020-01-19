@@ -21,22 +21,11 @@ Installation
 python3 -m pip install kustomize-wrapper
 ```
 
-Usage
------
-
-```console
-kustomize --help
-```
-
-Philosophy:
-
-- Build and lint by default
-
 Why should I use this tool?
 ---------------------------
 
-Forget about several `kustomize` calls, piping your calls into lint or apply
-commands. Using Kustomize is now even more pleasant!
+Forget about several `kustomize` calls, piping your calls into `kubeval`
+or `kubectl apply` commands. Using Kustomize is now even more pleasant!
 
 Instead of:
 ```yaml
@@ -70,3 +59,16 @@ production:
       --edit deployment/base set image IMAGE="foobar/application:${CI_COMMIT_SHA}"
       --apply
 ```
+
+Usage
+-----
+
+```console
+kustomize --help
+```
+
+Philosophy:
+
+- Build and lint by default
+- Kustomize commands become CLI options
+- Kubeval options become values of `--lint` option
