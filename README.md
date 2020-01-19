@@ -1,6 +1,13 @@
 Kustomize Wrapper
 =================
 
+[![kustomize](
+  https://img.shields.io/badge/kustomize-v3.5.4-5d8bee.svg?logo=kubernetes)](
+  https://github.com/kubernetes-sigs/kustomize/releases)
+[![kubeval](
+  https://img.shields.io/badge/kubeval-0.14.0-3f51b5.svg?logo=kubernetes)](
+  https://github.com/instrumenta/kubeval/releases)
+
 A wrapper for the Kubernetes Kustomize tool and related tooling.
 
 - More readable one-liners
