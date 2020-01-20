@@ -35,7 +35,23 @@ setup(
     ],
     python_requires='>=3.6',
     packages=find_packages(exclude=['tests']),
-    include_package_data=True,
+    data_files=[
+        ('', [
+            'requirements.in',
+        ]),
+        ('shared/bin/linux', [
+            'bin/linux/kubeval',
+            'bin/linux/kustomize',
+        ]),
+        ('shared/bin/darwin', [
+            'bin/darwin/kubeval',
+            'bin/darwin/kustomize',
+        ]),
+        ('shared/bin/windows', [
+            'bin/windows/kubeval.exe',
+            'bin/windows/kustomize.exe',
+        ]),
+    ],
     install_requires=read_file('requirements.in'),
     entry_points={
         'console_scripts': [

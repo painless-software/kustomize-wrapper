@@ -2,13 +2,17 @@
 Wrapper commands and options
 """
 import platform
+import sys
 
 from pathlib import Path
 
 
 def realpath(command):
     """
-    Return the full path of an executable shipped with this package
+    Return the full path of an executable shipped with this package.
+    Also appends the ".exe" extension if we're running on Windows.
     """
-    module_root = Path(__file__).parent.parent
-    return module_root / 'bin' / platform.system().lower() / command
+    binary_folder = \
+        Path(sys.prefix) / 'shared' / 'bin' / platform.system().lower()
+    command += '.exe' if platform.system() == 'Windows' else ''
+    return binary_folder / command
