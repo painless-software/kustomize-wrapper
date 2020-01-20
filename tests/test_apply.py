@@ -25,6 +25,6 @@ def test_uses_shell(mock_shell):
     """
     Does command use the shell function to run commands?
     """
-    kustomize.commands.apply.apply(folders=['foo', 'bar'], edit=None)
+    kustomize.commands.apply.apply(['foo', 'bar'], None)
 
     assert mock_shell.called, "Doesn't use shell() function"

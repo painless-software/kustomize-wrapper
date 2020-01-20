@@ -31,6 +31,8 @@ def apply(folders, edit):
 @main.command()
 @click.argument('folders', nargs=-1, required=True)
 @click.option('--edit')
-def lint(folders, edit):
+@click.option('--ignore-missing-schemas', flag_value='ignore_missing_schemas',
+              default=False)
+def lint(folders, edit, ignore_missing_schemas):
     """Verify whether manifests built by kustomize are valid"""
-    lint_command.lint(folders, edit)
+    lint_command.lint(folders, edit, ignore_missing_schemas)

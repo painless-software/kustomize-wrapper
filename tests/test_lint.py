@@ -25,6 +25,7 @@ def test_uses_shell(mock_shell):
     """
     Does command use the shell function to run commands?
     """
-    kustomize.commands.lint.lint(folders=['foo', 'bar'], edit=None)
+    kustomize.commands.lint.lint(['foo', 'bar', 'baz'], None, False)
 
-    assert mock_shell.called, "Doesn't use shell() function"
+    assert mock_shell.call_count == 3, \
+        "Should call shell() function 3 times"

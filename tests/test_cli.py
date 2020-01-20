@@ -39,6 +39,14 @@ def test_lint_command():
     assert exit_status == 0
 
 
+def test_lint_ignore_missing_schemas_option():
+    """
+    Does command provide the specific option?
+    """
+    exit_status = os.system('kustomize lint --ignore-missing-schemas --help')
+    assert exit_status == 0
+
+
 def test_version_command():
     """
     Is command available?
