@@ -27,7 +27,7 @@ setup(
         'Development Status :: 3 - Alpha',
         'Intended Audience :: System Administrators',
         'Topic :: System :: Networking',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -35,6 +35,7 @@ setup(
     ],
     python_requires='>=3.6',
     packages=find_packages(exclude=['tests']),
+    include_package_data=True,
     install_requires=read_file('requirements.in'),
     entry_points={
         'console_scripts': [
