@@ -3,7 +3,7 @@ Apply manifest built by kustomize
 """
 import os
 
-from ..util import realpath
+from ..binaries import realpath
 
 
 def apply(folders, edit):

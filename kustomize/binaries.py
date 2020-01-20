@@ -1,5 +1,5 @@
 """
-Wrapper commands and options
+Helper functions managing the included external binaries
 """
 import platform
 import sys
