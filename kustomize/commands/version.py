@@ -3,8 +3,8 @@ Supply version information of all components
 """
 import os
 
-from . import __version__
-from .util import realpath
+from .. import __version__
+from ..util import realpath
 
 
 def version():

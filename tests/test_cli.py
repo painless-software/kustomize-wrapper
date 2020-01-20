@@ -23,6 +23,22 @@ def test_entrypoint():
     assert exit_status == 0
 
 
+def test_apply_command():
+    """
+    Is command available?
+    """
+    exit_status = os.system('kustomize apply --help')
+    assert exit_status == 0
+
+
+def test_lint_command():
+    """
+    Is command available?
+    """
+    exit_status = os.system('kustomize lint --help')
+    assert exit_status == 0
+
+
 def test_version_command():
     """
     Is command available?

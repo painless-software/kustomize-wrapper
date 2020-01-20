@@ -1,5 +1,5 @@
 """
-Tests for the version command module
+Tests for the lint command module
 """
 import pytest
 
@@ -9,12 +9,12 @@ from unittest.mock import patch
 import kustomize.cli
 
 
-@patch('kustomize.commands.version.version')
+@patch('kustomize.commands.lint.lint')
 def test_cli_command(mock_command):
     """
     Is the correct code called when invoked via the CLI?
     """
-    with ArgvContext('kustomize', 'version'), pytest.raises(SystemExit):
+    with ArgvContext('kustomize', 'lint', '.'), pytest.raises(SystemExit):
         kustomize.cli.main()
 
     assert mock_command.called
