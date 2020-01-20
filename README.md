@@ -10,21 +10,23 @@ Kustomize Wrapper
 [![kubeval](
   https://img.shields.io/badge/kubeval-0.14.0-3f51b5.svg?logo=kubernetes)](
   https://github.com/instrumenta/kubeval/releases)
-[![travis-build](
-  https://img.shields.io/travis/painless-software/kustomize-wrapper/master.svg?logo=travis)](
-  https://travis-ci.org/painless-software/kustomize-wrapper)
 [![python-support](
   https://img.shields.io/pypi/pyversions/kustomize-wrapper.svg)](
   https://pypi.org/project/kustomize-wrapper)
 [![license](
   https://img.shields.io/pypi/l/kustomize-wrapper.svg)](
   https://github.com/painless-software/kustomize-wrapper/blob/master/LICENSE)
+[![travis-build](
+  https://img.shields.io/travis/painless-software/kustomize-wrapper/master.svg?logo=travis)](
+  https://travis-ci.org/painless-software/kustomize-wrapper)
 
-A wrapper for the Kubernetes Kustomize tool and related tooling.
+A Python wrapper for the Kubernetes [Kustomize](https://kustomize.io/) tool
+and related tooling.
 
-- More readable one-liners
+- More readable, more concise one-liners
 - Automatic linting (with integrated `kubeval`)
 - Easy installation with `pip` (e.g. in combination with `tox`)
+- Cross-platform (ships binaries for supported platforms)
 
 Installation
 ------------
@@ -51,7 +53,7 @@ You can now write:
 ```yaml
 lint:
   script:
-  - kustomize deployment/overlays/* --lint strict
+  - kustomize lint deployment/overlays/*
 ```
 
 Instead of:
@@ -67,9 +69,8 @@ You can now write:
 ```yaml
 production:
   script:
-  - kustomize deployment/overlays/production
-      --edit deployment/base set image IMAGE="foobar/application:${CI_COMMIT_SHA}"
-      --apply
+  - kustomize apply deployment/overlays/production --edit deployment/base \
+        set image IMAGE="foobar/application:${CI_COMMIT_SHA}"
 ```
 
 Usage
@@ -81,6 +82,6 @@ kustomize --help
 
 Philosophy:
 
-- Build and lint by default
+- Build automatically
 - Kustomize commands become CLI options
-- Kubeval options become values of `--lint` option
+- Kubeval options become CLI options of `lint` command
