@@ -22,13 +22,11 @@ stages:
 - test
 - deploy
 
-matrix:
+jobs:
   allow_failures:
   - env: TOXENV=bandit
   - os: osx
   - os: windows
-
-jobs:
   include:
   - { stage: lint, python: 3.8, env: TOXENV=flake8 }
   - { stage: lint, python: 3.8, env: TOXENV=pylint }
@@ -43,6 +41,6 @@ jobs:
       distributions: sdist bdist_wheel
       user: bittner
       password:
-        secure: iCxu5p6kmlp+ZoFwr29L7HMu6BmaI47OMWONBxMKGKk0R2x6dMSGEA/TRIWg1ioCqgJdsRewreijuZRG1Gg5GopfYt//HU6Hdhn7yApWRwKjIJ5+zmX+5BAdgBQ641jiHt7nZX3jzP2QMuqsEQTytieDNVi96aZpt1AsIvUYMtQ6USY0drGO0sxxYLtsmB2mTyOzHZ4iqu+dn0DqSVWpxttzIMVGyGfyFkAMMCJJPoE5cw3TLsQAiBE0+PCoLvsa8X+HFZH0TNk3AhGfKMlpKnvhji+TNHDpKVBU7cCPLbg7m+HTOEoLy3mAAUBECeciKtfAE4MDyW8OlUMYUhoJm6keHGEfWltukIKUNCy9JqsubiDyTEIA5NeOaO/5fQQAiENAM7tgxtb+MTxFSn14vtvaExt7GxyZtJc0TZk6AYdWr8kyfwSri431qWlSHk6OrC3mgvuq0KkoHOQvqD/DyCxUThlr2HzJ8kHIZqh391e9pnCoHDd7s3dfWyywqHRqzQG1dh52gClIXxwqq9/BcKOg7SAfXYOV0+68MhQ+rOq69vxPbmunMNNlaa2gbg5rkwKMCmIvptlCjwYqniV+BLJ+Sp7Y4HKIwc/SCnWwNqeUKPLzSMuFwo3p1G1NfWUCempeX8e3OJpsSxSVoEvBLM2lotjgF7I9xYUk7TLKsuY=
+        secure: hhyaxP28sn3iHe6CPAgrXeK3cOm4+jPdu4Q6K9J6eimVwGVx0C+a47TLzZ6CtSixmgyY5oByLU9Hb5lHCbAkJA9SqYGBJr1xQB/mb4fiLh0O5YjXNpJ1cV13buhobC2DoIXoBbbSYn7Axul/ZmmYGfOUFHjdGudsfllG6xq6ZTA75zerO/l+NWAA3jEjBIm4v2fRfsBJFe+ro/FMoT1zbagD6t4xK6YruHoy7zUjReKtpXFvH+2ifTPeW+KBNUN+p9h8QMlVAJBRvjQ1CwwrZq8Xh23HwyyQaaK8lI4yHIvyIdKPB9lBR+fbA30qT55jMnBCYfq+wJ71moc3MzozhR+NxpB9YeqVgciXJrlqs92ipFj6JYqZVXveBWifm2/Dy5y+pqjJNjF0Pt8WmTtICeHzJ+K9E39pNLvjkaOFTBQclsN2NpnaUSe4W8i/gnMLTfJWJN+Y7iVlH4P0/ed3ymKwsgkYl9NHMPa+RGFBCizdKYW08pZ7LLVpWQ+ItpKHUPjvp0keCodb6sIX+9W2p7lmTXT1jqcvyqUvBHqkyOLZFRHktb/YF+IDJGRYYMAqhAsD36L8b6plaveVHd8yQCPVoJbIapmcwrJlJiCXq3to9KCXhDoMnrpxk7d+eth8K+wLh/Wc2UWPbw9pqlwa+f+kP0ySIQI19RCXz51NtBU=
       on:
         tags: true
