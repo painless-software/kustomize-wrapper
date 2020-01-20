@@ -6,7 +6,7 @@ import pytest
 from cli_test_helpers import ArgvContext
 from unittest.mock import patch
 
-import kustomize.cli
+import kustomize
 
 
 @patch('kustomize.commands.lint.lint')
@@ -18,3 +18,13 @@ def test_cli_command(mock_command):
         kustomize.cli.main()
 
     assert mock_command.called
+
+
+@patch('kustomize.commands.lint.shell')
+def test_uses_shell(mock_shell):
+    """
+    Does command use the shell function to run commands?
+    """
+    kustomize.commands.lint.lint(folders=['foo', 'bar'], edit=None)
+
+    assert mock_shell.called, "Doesn't use shell() function"

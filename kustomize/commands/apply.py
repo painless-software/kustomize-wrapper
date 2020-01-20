@@ -1,9 +1,7 @@
 """
 Apply manifest built by kustomize
 """
-import os
-
-from ..binaries import realpath
+from ..binaries import realpath, shell
 
 
 def apply(folders, edit):
@@ -18,5 +16,4 @@ def apply(folders, edit):
     if edit:
         pass
 
-    print(exec_string)
-    os.system(exec_string)
+    shell(exec_string)

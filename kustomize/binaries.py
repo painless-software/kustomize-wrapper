@@ -1,6 +1,7 @@
 """
 Helper functions managing the included external binaries
 """
+import os
 import platform
 import sys
 
@@ -16,3 +17,14 @@ def realpath(command):
         Path(sys.prefix) / 'shared' / 'bin' / platform.system().lower()
     command += '.exe' if platform.system() == 'Windows' else ''
     return binary_folder / command
+
+
+def shell(command):
+    """
+    Run a shell command and print it out, beautified, beforehand.
+    """
+    location = str(realpath('_').parent) + os.path.sep
+    beautified_command = command.replace(location, '')
+
+    print(beautified_command)
+    os.system(command)

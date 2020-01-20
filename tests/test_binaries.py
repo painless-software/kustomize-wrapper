@@ -1,8 +1,11 @@
 """
 Tests for the binaries helper module
 """
+import os
 import platform
 import pytest
+
+from unittest.mock import patch
 
 import kustomize.binaries
 
@@ -43,3 +46,20 @@ def test_binaries_available():
 
     assert kustomize_excutable.is_file()
     assert kubeval_executable.is_file()
+
+
+@patch('builtins.print')
+@patch('os.system')
+def test_shell(mock_system, mock_print):
+    """
+    Is command printed and then executed?
+    """
+    executable = kustomize.binaries.realpath('foo')
+    exec_location = str(executable.parent) + os.path.sep
+    shell_command = f"{executable} --bar | {executable} baz"
+    kustomize.binaries.shell(shell_command)
+
+    assert mock_print.called, "print() is never called"
+    assert exec_location not in str(mock_print.mock_calls[0]), \
+        "Output doesn't seem to be beautified"
+    assert mock_system.called, "system() is never called"
