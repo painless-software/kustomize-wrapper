@@ -1,9 +1,11 @@
-Kustomize Wrapper
-=================
-
-[![latest-version](
+Kustomize Wrapper [![latest-version](
   https://img.shields.io/pypi/v/kustomize-wrapper.svg)](
   https://pypi.org/project/kustomize-wrapper)
+=================
+
+[![travis-build](
+  https://img.shields.io/travis/painless-software/kustomize-wrapper/master.svg?logo=travis)](
+  https://travis-ci.org/painless-software/kustomize-wrapper)
 [![kustomize](
   https://img.shields.io/badge/kustomize-v3.5.4-5d8bee.svg?logo=kubernetes)](
   https://github.com/kubernetes-sigs/kustomize/releases)
@@ -16,9 +18,6 @@ Kustomize Wrapper
 [![license](
   https://img.shields.io/pypi/l/kustomize-wrapper.svg)](
   https://github.com/painless-software/kustomize-wrapper/blob/master/LICENSE)
-[![travis-build](
-  https://img.shields.io/travis/painless-software/kustomize-wrapper/master.svg?logo=travis)](
-  https://travis-ci.org/painless-software/kustomize-wrapper)
 
 A Python wrapper for the Kubernetes [Kustomize](https://kustomize.io/) tool
 and related tooling.
