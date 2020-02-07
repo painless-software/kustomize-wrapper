@@ -31,6 +31,14 @@ def test_apply_command():
     assert exit_status == 0
 
 
+def test_build_command():
+    """
+    Is command available?
+    """
+    exit_status = os.system('kustomize build --help')
+    assert exit_status == 0
+
+
 def test_lint_command():
     """
     Is command available?
