@@ -6,6 +6,7 @@ import platform
 import sys
 
 from pathlib import Path
+from subprocess import CalledProcessError, PIPE, run
 
 
 def realpath(command):
@@ -19,12 +20,34 @@ def realpath(command):
     return binary_folder / command
 
 
-def shell(command):
+def shell(command, silent=False):
     """
-    Run a shell command and print it out, beautified, beforehand.
+    Run a shell command with pipes and print it out, beautified, beforehand.
     """
     location = str(realpath('_').parent) + os.path.sep
-    beautified_command = command.replace(location, '')
 
-    print(beautified_command)
-    os.system(command)
+    if not silent:
+        beautified_command = command.replace(location, '')
+        print(beautified_command)
+
+    commands = [cmd.strip() for cmd in command.split('|')]
+    last_output = None
+
+    for cmd in commands:
+        try:
+            result = run(cmd.split(),
+                         check=True,
+                         input=last_output,
+                         stderr=PIPE,
+                         stdout=PIPE,
+                         universal_newlines=True)
+            last_output = result.stdout
+        except CalledProcessError as err:
+            raise SystemExit(err.output)
+        except FileNotFoundError as err:
+            raise SystemExit(err)
+
+    if not silent:
+        print(last_output)
+
+    return last_output
