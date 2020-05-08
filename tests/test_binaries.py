@@ -49,8 +49,8 @@ def test_binaries_available():
 
 
 @patch('builtins.print')
-@patch('os.system')
-def test_shell(mock_system, mock_print):
+@patch('kustomize.binaries.run')
+def test_shell_piped_command(mock_run, mock_print):
     """
     Is command printed and then executed?
     """
@@ -59,7 +59,17 @@ def test_shell(mock_system, mock_print):
     shell_command = f"{executable} --bar | {executable} baz"
     kustomize.binaries.shell(shell_command)
 
-    assert mock_print.called, "print() is never called"
+    assert mock_print.called, \
+        "print() is never called"
     assert exec_location not in str(mock_print.mock_calls[0]), \
         "Output doesn't seem to be beautified"
-    assert mock_system.called, "system() is never called"
+    assert len(mock_run.mock_calls) == 2, \
+        f"run() not called for each command in '{shell_command}'"
+
+
+def test_shell_failing_command():
+    """
+    Does an invalid command print its output and exit cleanly?
+    """
+    with pytest.raises(SystemExit):
+        kustomize.binaries.shell('/non/existing/command')
