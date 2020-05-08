@@ -1,16 +1,15 @@
 """
 Supply version information of all components
 """
-import os
-
 from .. import __version__
-from ..binaries import realpath
+from ..binaries import realpath, shell
 
 
 def version():
     """Show version of all shipped components"""
-    print(f"Kustomize wrapper {__version__}")
-    print(f"kustomize:")
-    os.system(f"{realpath('kustomize')} version")
-    print(f"kubeval:")
-    os.system(f"{realpath('kubeval')} --version")
+    kustomize_version = shell(f"{realpath('kustomize')} version", silent=True)
+    kubeval_version = shell(f"{realpath('kubeval')} --version", silent=True)
+
+    print(f"kustomize-wrapper {__version__}")
+    print(f"Kustomize {kustomize_version.strip()}")
+    print(f"Kubeval {kubeval_version.strip()}")
