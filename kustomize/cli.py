@@ -40,8 +40,11 @@ def build(folders, edit):
 @main.command()
 @click.argument('folders', nargs=-1, required=True)
 @click.option('--edit')
+@click.option('--force-color/--no-color', default=True,
+              help="Force ANSI colors on non-terminals, or turn it off always")
 @click.option('--ignore-missing-schemas', flag_value='ignore_missing_schemas',
-              default=False)
-def lint(folders, edit, ignore_missing_schemas):
+              default=False,
+              help='Skip validation for resource definitions without a schema')
+def lint(folders, edit, force_color, ignore_missing_schemas):
     """Verify whether manifests built by kustomize are valid"""
-    lint_command.lint(folders, edit, ignore_missing_schemas)
+    lint_command.lint(folders, edit, force_color, ignore_missing_schemas)

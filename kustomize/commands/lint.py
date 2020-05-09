@@ -4,15 +4,16 @@ Perform validation of manifest built by kustomize
 from ..binaries import realpath, shell
 
 
-def lint(folders, edit, ignore_missing_schemas):
+def lint(folders, edit, force_color, ignore_missing_schemas):
     """
     Verify whether manifests built by kustomize are valid
     """
     kustomize = realpath('kustomize')
     kubeval = realpath('kubeval')
     kubeval_options = ' '.join([
-        '--strict',
+        '--force-color' if force_color else '',
         '--ignore-missing-schemas' if ignore_missing_schemas else '',
+        '--strict',
     ])
 
     if edit:

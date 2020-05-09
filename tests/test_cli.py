@@ -47,6 +47,14 @@ def test_lint_command():
     assert exit_status == 0
 
 
+def test_lint_force_color_option():
+    """
+    Does command provide the specific option?
+    """
+    exit_status = os.system('kustomize lint --force-color --help')
+    assert exit_status == 0
+
+
 def test_lint_ignore_missing_schemas_option():
     """
     Does command provide the specific option?
