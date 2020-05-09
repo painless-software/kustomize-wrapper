@@ -25,7 +25,8 @@ def test_uses_shell(mock_shell):
     """
     Does command use the shell function to run commands?
     """
-    kustomize.commands.lint.lint(['foo', 'bar', 'baz'], None, False)
+    with pytest.raises(SystemExit):
+        kustomize.commands.lint.lint(['foo', 'bar', 'baz'], None, False)
 
     assert mock_shell.call_count == 3, \
         "Should call shell() function 3 times"

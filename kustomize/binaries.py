@@ -6,7 +6,7 @@ import platform
 import sys
 
 from pathlib import Path
-from subprocess import CalledProcessError, PIPE, run
+from subprocess import CalledProcessError, CompletedProcess, PIPE, run
 
 
 def realpath(command):
@@ -20,34 +20,48 @@ def realpath(command):
     return binary_folder / command
 
 
-def shell(command, silent=False):
+def run_piped_commands(commands: list) -> CompletedProcess:
     """
-    Run a shell command with pipes and print it out, beautified, beforehand.
+    Silently run a list of commands piping one's output into the next one.
+    Aborts gracefully on error, setting a non-zero ``returncode`` on the
+    returned object.
     """
-    location = str(realpath('_').parent) + os.path.sep
-
-    if not silent:
-        beautified_command = command.replace(location, '')
-        print(beautified_command)
-
-    commands = [cmd.strip() for cmd in command.split('|')]
-    last_output = None
+    result = CompletedProcess(0, None)
 
     for cmd in commands:
+        args = cmd.split()
         try:
-            result = run(cmd.split(),
+            result = run(args,
                          check=True,
-                         input=last_output,
+                         input=result.stdout,
                          stderr=PIPE,
                          stdout=PIPE,
                          universal_newlines=True)
-            last_output = result.stdout
         except CalledProcessError as err:
-            raise SystemExit(err.output)
+            return CompletedProcess(args, 1,
+                                    stderr=err.stderr,
+                                    stdout=err.stdout)
         except FileNotFoundError as err:
-            raise SystemExit(err)
+            return CompletedProcess(args, 1, stderr=str(err))
 
-    if not silent:
-        print(last_output)
+    return result
 
-    return last_output
+
+def shell(shell_command, fail=False):
+    """
+    Run a shell command with pipes and print it out, beautified, beforehand
+    """
+    location = str(realpath('_').parent) + os.path.sep
+    beautified_command = shell_command.replace(location, '')
+    print(beautified_command)
+
+    commands = [cmd.strip() for cmd in shell_command.split('|')]
+    result = run_piped_commands(commands)
+
+    if result.stdout:
+        print(result.stdout.strip())
+
+    if result.returncode and fail:
+        raise SystemExit(result.stderr.strip())
+
+    return result
