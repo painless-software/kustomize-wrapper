@@ -47,6 +47,14 @@ def test_lint_command():
     assert exit_status == 0
 
 
+def test_lint_fail_fast_option():
+    """
+    Does command provide the specific option?
+    """
+    exit_status = os.system('kustomize lint --fail-fast --help')
+    assert exit_status == 0
+
+
 def test_lint_force_color_option():
     """
     Does command provide the specific option?

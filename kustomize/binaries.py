@@ -61,7 +61,10 @@ def shell(shell_command, fail=False):
     if result.stdout:
         print(result.stdout.strip())
 
-    if result.returncode and fail:
-        raise SystemExit(result.stderr.strip())
+    if result.returncode:
+        msg = result.stderr.strip()
+        if fail:
+            raise SystemExit(msg)
+        print(msg, file=sys.stderr)
 
     return result

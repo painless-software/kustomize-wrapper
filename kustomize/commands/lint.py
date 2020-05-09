@@ -4,7 +4,7 @@ Perform validation of manifest built by kustomize
 from ..binaries import realpath, shell
 
 
-def lint(folders, edit, force_color, ignore_missing_schemas):
+def lint(folders, edit, fail_fast, force_color, ignore_missing_schemas):
     """
     Verify whether manifests built by kustomize are valid
     """
@@ -22,6 +22,6 @@ def lint(folders, edit, force_color, ignore_missing_schemas):
     status = 0
     for folder in folders:
         command = f"{kustomize} build {folder} | {kubeval} {kubeval_options}"
-        status += shell(command).returncode
+        status += shell(command, fail=fail_fast).returncode
 
     raise SystemExit(status)
