@@ -57,7 +57,7 @@ def test_run_piped_commands(mock_run):
     kustomize.binaries.run_piped_commands(command_list)
 
     assert len(mock_run.mock_calls) == 3, \
-        f"run() not called for each command in '{command_list.join(' | ')}'"
+        f"run() not called for each command in '{' | '.join(command_list)}'"
 
 
 @patch('builtins.print')
