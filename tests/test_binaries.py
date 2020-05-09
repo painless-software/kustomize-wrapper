@@ -48,9 +48,21 @@ def test_binaries_available():
     assert kubeval_executable.is_file()
 
 
-@patch('builtins.print')
 @patch('kustomize.binaries.run')
-def test_shell_piped_command(mock_run, mock_print):
+def test_run_piped_commands(mock_run):
+    """
+    Is list of commands properly executed as a pipe?
+    """
+    command_list = ['foo abc', 'bar -v', 'baz']
+    kustomize.binaries.run_piped_commands(command_list)
+
+    assert len(mock_run.mock_calls) == 3, \
+        f"run() not called for each command in '{command_list.join(' | ')}'"
+
+
+@patch('builtins.print')
+@patch('kustomize.binaries.run_piped_commands')
+def test_shell_command(mock_run_piped_commands, mock_print):
     """
     Is command printed and then executed?
     """
@@ -63,13 +75,23 @@ def test_shell_piped_command(mock_run, mock_print):
         "print() is never called"
     assert exec_location not in str(mock_print.mock_calls[0]), \
         "Output doesn't seem to be beautified"
-    assert len(mock_run.mock_calls) == 2, \
-        f"run() not called for each command in '{shell_command}'"
+    assert mock_run_piped_commands.called, \
+        f"run_piped_commands() is not called"
 
 
-def test_shell_failing_command():
+def test_shell_failing_returncode():
     """
-    Does an invalid command print its output and exit cleanly?
+    Does an invalid command return a failing status code?
+    """
+    result = kustomize.binaries.shell('/non/existing/command')
+
+    assert result.returncode, \
+        "Non-zero status code expected, zero received"
+
+
+def test_shell_failing_systemexit():
+    """
+    Does an invalid command abort execution when ``fail`` is set?
     """
     with pytest.raises(SystemExit):
-        kustomize.binaries.shell('/non/existing/command')
+        kustomize.binaries.shell('/non/existing/command', fail=True)
