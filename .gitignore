@@ -1,4 +1,5 @@
+/.tox/
 /build/
 /dist/
+/kustomize-wrapper-*/
 /*.egg-info/
-/.tox/
