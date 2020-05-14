@@ -20,8 +20,8 @@ def test_cli_command(mock_command):
     assert mock_command.called
 
 
-@patch('kustomize.commands.lint.shell')
-def test_fail_fast(mock_shell):
+@patch('builtins.print')
+def test_fail_fast(mock_print):
     """
     Is the correct code called when invoked with option?
     """
@@ -29,8 +29,8 @@ def test_fail_fast(mock_shell):
             pytest.raises(SystemExit):
         kustomize.cli.main()
 
-    assert str(mock_shell.mock_calls[0]).endswith(', fail=True)'), \
-        "shell() function not called with fail=True"
+    assert str(mock_print.call_args).startswith(
+        "call('Validation of your manifests FAILED.'")
 
 
 @patch('kustomize.commands.lint.shell')

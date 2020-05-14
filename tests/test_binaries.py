@@ -76,7 +76,7 @@ def test_shell_command(mock_run_piped_commands, mock_print):
     assert exec_location not in str(mock_print.mock_calls[0]), \
         "Output doesn't seem to be beautified"
     assert mock_run_piped_commands.called, \
-        f"run_piped_commands() is not called"
+        "run_piped_commands() is not called"
 
 
 def test_shell_failing_returncode():
@@ -87,11 +87,3 @@ def test_shell_failing_returncode():
 
     assert result.returncode, \
         "Non-zero status code expected, zero received"
-
-
-def test_shell_failing_systemexit():
-    """
-    Does an invalid command abort execution when ``fail`` is set?
-    """
-    with pytest.raises(SystemExit):
-        kustomize.binaries.shell('/non/existing/command', fail=True)

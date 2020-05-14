@@ -47,7 +47,7 @@ def run_piped_commands(commands: list) -> CompletedProcess:
     return result
 
 
-def shell(shell_command, fail=False):
+def shell(shell_command):
     """
     Run a shell command with pipes and print it out, beautified, beforehand
     """
@@ -58,13 +58,10 @@ def shell(shell_command, fail=False):
     commands = [cmd.strip() for cmd in shell_command.split('|')]
     result = run_piped_commands(commands)
 
-    if result.stdout:
-        print(result.stdout.strip())
+    if result.stdout and result.stdout.strip():
+        print(result.stdout.strip(), file=sys.stdout)
 
-    if result.returncode:
-        msg = result.stderr.strip()
-        if fail:
-            raise SystemExit(msg)
-        print(msg, file=sys.stderr)
+    if result.stderr and result.stderr.strip():
+        print(result.stderr.strip(), file=sys.stderr)
 
     return result
