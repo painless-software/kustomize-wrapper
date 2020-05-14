@@ -1,6 +1,8 @@
 """
 Perform validation of manifest built by kustomize
 """
+import sys
+
 from ..binaries import realpath, shell
 
 
@@ -22,6 +24,10 @@ def lint(folders, edit, fail_fast, force_color, ignore_missing_schemas):
     status = 0
     for folder in folders:
         command = f"{kustomize} build {folder} | {kubeval} {kubeval_options}"
-        status += shell(command, fail=fail_fast).returncode
+        status += shell(command).returncode
+        if status and fail_fast:
+            break
 
+    if status:
+        print("Validation of your manifests FAILED.", file=sys.stderr)
     raise SystemExit(status)
