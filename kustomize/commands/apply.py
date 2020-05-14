@@ -2,12 +2,15 @@
 Apply manifest built by kustomize
 """
 from ..binaries import binarypath, shell
+from ..download import ensure_binary
 
 
 def apply(folders, edit):
     """
     Apply manifests built by kustomize to the Kubernetes cluster
     """
+    ensure_binary('kustomize')
+
     kustomize = binarypath('kustomize')
     kubectl_apply = "kubectl apply -f -"
     folder_list = ' '.join(folders)

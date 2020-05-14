@@ -2,11 +2,25 @@
 Tests for the download helper module
 """
 import platform
+import pytest
 import responses
 
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 import kustomize
+
+
+@patch('kustomize.download.GithubReleases')
+def test_ensure_binary(mock_downloader):
+    """
+    Does function trigger download of a non-existing binary?
+    """
+    kustomize.download.ensure_binary('foo')
+
+    assert mock_downloader.mock_calls == [
+        call('foo'),
+        call().download(),
+    ]
 
 
 def test_kubeval_object():
@@ -81,3 +95,29 @@ def test_download(mock_tempfile, mock_unpackarchive, mock_version):
     args, kwargs = mock_unpackarchive.call_args
     assert args[1] == dl_targetdir, \
         "Extraction to binaries folder not attempted correctly"
+
+
+@responses.activate
+@patch('builtins.SystemExit', side_effect=KeyboardInterrupt)
+@patch('kustomize.download.GithubReleases.get_lateststable_version',
+       return_value='v1.2.3')
+@patch('kustomize.download.unpack_archive', side_effect=PermissionError)
+@patch('kustomize.download.NamedTemporaryFile')
+def test_fail_gracefully(
+        mock_tempfile, mock_unpackarchive, mock_version, mock_systemexit):
+    """
+    If download or extraction fails we need to fail nicely.
+    """
+    dl = kustomize.download.GithubReleases('kustomize')
+    dl.version = 'v1.2.3'
+    dl_url = f"{dl.releases}/download/{dl.archive_schema}" % dl.__dict__
+    responses.add(responses.GET, dl_url)
+
+    assert 'kustomize/v1.2.3/kustomize_v1.2.3_' in dl_url, \
+        "Unexpected URL; mocked request will likely fail"
+
+    with pytest.raises(KeyboardInterrupt):
+        dl.download()
+
+    args, kwargs = mock_systemexit.call_args
+    assert args[0].startswith("Writing binary failed:")

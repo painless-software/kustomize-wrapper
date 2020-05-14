@@ -4,12 +4,16 @@ Perform validation of manifest built by kustomize
 import sys
 
 from ..binaries import binarypath, shell
+from ..download import ensure_binary
 
 
 def lint(folders, edit, fail_fast, force_color, ignore_missing_schemas):
     """
     Verify whether manifests built by kustomize are valid
     """
+    ensure_binary('kustomize')
+    ensure_binary('kubeval')
+
     kustomize = binarypath('kustomize')
     kubeval = binarypath('kubeval')
     kubeval_options = ' '.join([

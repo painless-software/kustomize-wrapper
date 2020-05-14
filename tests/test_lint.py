@@ -4,7 +4,7 @@ Tests for the lint command module
 import pytest
 
 from cli_test_helpers import ArgvContext
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 import kustomize
 
@@ -20,8 +20,9 @@ def test_cli_command(mock_command):
     assert mock_command.called
 
 
+@patch('kustomize.commands.lint.ensure_binary')
 @patch('builtins.print')
-def test_fail_fast(mock_print):
+def test_fail_fast(mock_print, mock_ensurebinary):
     """
     Is the correct code called when invoked with option?
     """
@@ -29,12 +30,13 @@ def test_fail_fast(mock_print):
             pytest.raises(SystemExit):
         kustomize.cli.main()
 
-    assert str(mock_print.call_args).startswith(
-        "call('Validation of your manifests FAILED.'")
+    args, kwargs = mock_print.call_args
+    assert args == ('Validation of your manifests FAILED.',)
 
 
+@patch('kustomize.commands.lint.ensure_binary')
 @patch('kustomize.commands.lint.shell')
-def test_uses_shell(mock_shell):
+def test_uses_shell(mock_shell, mock_ensurebinary):
     """
     Does command use the shell function to run commands?
     """
@@ -44,6 +46,11 @@ def test_uses_shell(mock_shell):
                                      fail_fast=False,
                                      force_color=False,
                                      ignore_missing_schemas=False)
+
+    assert mock_ensurebinary.mock_calls == [
+        call('kustomize'),
+        call('kubeval'),
+    ], "We don't ensure all binaries are available"
 
     assert mock_shell.call_count == 3, \
         "Should call shell() function 3 times"

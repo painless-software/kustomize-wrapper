@@ -2,19 +2,9 @@
 """
 Packaging for example CLI tool
 """
-import atexit
-
 from setuptools import setup, find_packages
-from kustomize.download import GithubReleases
 
 import kustomize as package
-
-
-@atexit.register
-def download_binaries():
-    """Download external binaries after this package is installed"""
-    GithubReleases('kustomize').download()
-    GithubReleases('kubeval').download()
 
 
 def read_file(filename):
