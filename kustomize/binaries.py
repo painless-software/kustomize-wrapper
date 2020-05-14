@@ -2,20 +2,19 @@
 Helper functions managing the included external binaries
 """
 import os
+import pathlib
 import platform
 import sys
 
-from pathlib import Path
 from subprocess import CalledProcessError, CompletedProcess, PIPE, run
 
 
-def realpath(command):
+def binarypath(command=''):
     """
-    Return the full path of an executable shipped with this package.
+    Return the full path of an external binary used by this package.
     Also appends the ".exe" extension if we're running on Windows.
     """
-    binary_folder = \
-        Path(sys.prefix) / 'shared' / 'bin' / platform.system().lower()
+    binary_folder = pathlib.Path(sys.prefix) / 'shared' / 'bin'
     command += '.exe' if platform.system() == 'Windows' else ''
     return binary_folder / command
 
@@ -51,7 +50,7 @@ def shell(shell_command):
     """
     Run a shell command with pipes and print it out, beautified, beforehand
     """
-    location = str(realpath('_').parent) + os.path.sep
+    location = str(binarypath()) + os.path.sep
     beautified_command = shell_command.replace(location, '')
     print(beautified_command)
 

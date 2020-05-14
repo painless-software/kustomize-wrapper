@@ -2,47 +2,33 @@
 Tests for the binaries helper module
 """
 import os
-import platform
-import pytest
+import sys
 
-from unittest.mock import patch
+from unittest.mock import patch, PropertyMock
 
 import kustomize.binaries
 
 
-@pytest.mark.skipif(platform.system() != 'Linux', reason="requires Linux")
-def test_realpath_linux():
+@patch('platform.system', return_value='Linux')
+def test_binarypath(mock_platform):
     """
     Is path to shipped binaries calculated properly?
     """
-    path = kustomize.binaries.realpath('foo')
-    assert '/bin/linux/' in str(path)
+    old_prefix = sys.prefix
+    sys.prefix = '/some/path'
 
+    path = kustomize.binaries.binarypath('foo')
+    assert str(path) == '/some/path/shared/bin/foo'
 
-@pytest.mark.skipif(platform.system() != 'Darwin', reason="requires macOS")
-def test_realpath_macos():
-    """
-    Is path to shipped binaries calculated properly?
-    """
-    path = kustomize.binaries.realpath('foo')
-    assert '/bin/darwin/' in str(path)
-
-
-@pytest.mark.skipif(platform.system() != 'Windows', reason="requires Windows")
-def test_realpath_windows():
-    """
-    Is path to shipped binaries calculated properly?
-    """
-    path = kustomize.binaries.realpath('foo')
-    assert '\\bin\\windows\\' in str(path)
+    sys.prefix = old_prefix
 
 
 def test_binaries_available():
     """
-    Are binaries available (cross-platform) from the calculated realpath?
+    Are binaries available (cross-platform) from the calculated binarypath?
     """
-    kustomize_excutable = kustomize.binaries.realpath('kustomize')
-    kubeval_executable = kustomize.binaries.realpath('kubeval')
+    kustomize_excutable = kustomize.binaries.binarypath('kustomize')
+    kubeval_executable = kustomize.binaries.binarypath('kubeval')
 
     assert kustomize_excutable.is_file()
     assert kubeval_executable.is_file()
@@ -66,7 +52,7 @@ def test_shell_command(mock_run_piped_commands, mock_print):
     """
     Is command printed and then executed?
     """
-    executable = kustomize.binaries.realpath('foo')
+    executable = kustomize.binaries.binarypath('foo')
     exec_location = str(executable.parent) + os.path.sep
     shell_command = f"{executable} --bar | {executable} baz"
     kustomize.binaries.shell(shell_command)
