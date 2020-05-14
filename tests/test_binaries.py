@@ -4,7 +4,7 @@ Tests for the binaries helper module
 import os
 import sys
 
-from unittest.mock import patch, PropertyMock
+from unittest.mock import patch
 
 import kustomize.binaries
 
@@ -18,20 +18,9 @@ def test_binarypath(mock_platform):
     sys.prefix = '/some/path'
 
     path = kustomize.binaries.binarypath('foo')
-    assert str(path) == '/some/path/shared/bin/foo'
+    assert str(path) == '/some/path/local/bin/foo'
 
     sys.prefix = old_prefix
-
-
-def test_binaries_available():
-    """
-    Are binaries available (cross-platform) from the calculated binarypath?
-    """
-    kustomize_excutable = kustomize.binaries.binarypath('kustomize')
-    kubeval_executable = kustomize.binaries.binarypath('kubeval')
-
-    assert kustomize_excutable.is_file()
-    assert kubeval_executable.is_file()
 
 
 @patch('kustomize.binaries.run')

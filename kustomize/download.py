@@ -30,6 +30,14 @@ BINARY_INFO = {
 }
 
 
+def ensure_binary(command):
+    """
+    Download the command binary if it's not available for execution
+    """
+    if not binarypath(command).is_file():
+        GithubReleases(command).download()
+
+
 class GithubReleases:
     """Download binaries from GitHub repo release page"""
 
@@ -62,10 +70,16 @@ class GithubReleases:
 
         print(f"Downloading {download_url} ...")
         response = requests.get(download_url)
-        archive = NamedTemporaryFile(suffix=filename, delete=False)
-        archive.write(response.content)
-        archive.close()
+        try:
+            archive = NamedTemporaryFile(suffix=filename, delete=False)
+            archive.write(response.content)
+            archive.close()
+        except OSError as err:
+            raise SystemExit(f"Download failed: {err}")
 
         print(f"Extracting from {archive.name}: "
               f"{self.binary} -> {target_directory} ...")
-        unpack_archive(archive.name, target_directory)
+        try:
+            unpack_archive(archive.name, target_directory)
+        except OSError as err:
+            raise SystemExit(f"Writing binary failed: {err}")

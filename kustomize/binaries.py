@@ -14,7 +14,7 @@ def binarypath(command=''):
     Return the full path of an external binary used by this package.
     Also appends the ".exe" extension if we're running on Windows.
     """
-    binary_folder = pathlib.Path(sys.prefix) / 'shared' / 'bin'
+    binary_folder = pathlib.Path(sys.prefix) / 'local' / 'bin'
     command += '.exe' if platform.system() == 'Windows' else ''
     return binary_folder / command
 
