@@ -2,9 +2,19 @@
 """
 Packaging for example CLI tool
 """
+import atexit
+
 from setuptools import setup, find_packages
+from kustomize.download import GithubReleases
 
 import kustomize as package
+
+
+@atexit.register
+def download_binaries():
+    """Download external binaries after this package is installed"""
+    GithubReleases('kustomize').download()
+    GithubReleases('kubeval').download()
 
 
 def read_file(filename):
@@ -24,7 +34,7 @@ setup(
     author_email=package.__email__,
     license=package.__license__,
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: System Administrators',
         'Topic :: System :: Networking',
         'License :: OSI Approved :: Apache Software License',
@@ -38,18 +48,6 @@ setup(
     data_files=[
         ('', [
             'requirements.in',
-        ]),
-        ('shared/bin/linux', [
-            'bin/linux/kubeval',
-            'bin/linux/kustomize',
-        ]),
-        ('shared/bin/darwin', [
-            'bin/darwin/kubeval',
-            'bin/darwin/kustomize',
-        ]),
-        ('shared/bin/windows', [
-            'bin/windows/kubeval.exe',
-            'bin/windows/kustomize.exe',
         ]),
     ],
     install_requires=read_file('requirements.in'),

@@ -1,14 +1,14 @@
 """
 Apply manifest built by kustomize
 """
-from ..binaries import realpath, shell
+from ..binaries import binarypath, shell
 
 
 def apply(folders, edit):
     """
     Apply manifests built by kustomize to the Kubernetes cluster
     """
-    kustomize = realpath('kustomize')
+    kustomize = binarypath('kustomize')
     kubectl_apply = "kubectl apply -f -"
     folder_list = ' '.join(folders)
     exec_string = f"{kustomize} build {folder_list} | {kubectl_apply}"
