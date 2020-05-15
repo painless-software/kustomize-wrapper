@@ -3,11 +3,11 @@ Helper class to download external binaries
 """
 import platform
 
-from shutil import unpack_archive
 from tempfile import NamedTemporaryFile
 
 import requests
 
+from .archive import unpack_archive
 from .binaries import binarypath
 
 BINARY_INFO = {
@@ -40,7 +40,7 @@ def ensure_binary(command):
     Download the command binary if it's not available for execution
     """
     if not binary_exists(command):
-        print(f"Binary for {command} not found. Attempting to download ...")
+        print(f"Binary for {command} not found. Attempting download ...")
         GithubReleases(command).download()
 
 
@@ -86,10 +86,10 @@ class GithubReleases:
         except OSError as err:
             raise SystemExit(f"Download failed: {err}")
 
-        print(f"Extracting from {archive.name}: "
-              f"{self.binary} -> {target_directory} ...")
+        print(f"Extracting from {archive.name}:"
+              f" {target_directory / self.binary}")
         try:
-            unpack_archive(archive.name, target_directory)
-        except OSError as err:
+            unpack_archive(archive.name, target_directory, self.binary)
+        except Exception as err:
             raise SystemExit(f"Extracting binary failed: {err}\n"
                              "Try installing in --user space.")
