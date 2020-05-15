@@ -7,11 +7,11 @@ Kustomize Wrapper [![latest-version](
   https://img.shields.io/travis/painless-software/kustomize-wrapper/master.svg?logo=travis)](
   https://travis-ci.org/painless-software/kustomize-wrapper)
 [![kustomize](
-  https://img.shields.io/badge/kustomize-v3.5.4-5d8bee.svg?logo=kubernetes)](
-  https://github.com/kubernetes-sigs/kustomize/releases)
+  https://img.shields.io/badge/kustomize-latest-5d8bee.svg?logo=kubernetes)](
+  https://github.com/kubernetes-sigs/kustomize/releases/latest)
 [![kubeval](
-  https://img.shields.io/badge/kubeval-0.14.0-3f51b5.svg?logo=kubernetes)](
-  https://github.com/instrumenta/kubeval/releases)
+  https://img.shields.io/badge/kubeval-latest-3f51b5.svg?logo=kubernetes)](
+  https://github.com/instrumenta/kubeval/releases/latest)
 [![python-support](
   https://img.shields.io/pypi/pyversions/kustomize-wrapper.svg)](
   https://pypi.org/project/kustomize-wrapper)
@@ -23,9 +23,10 @@ A Python wrapper for the Kubernetes [Kustomize](https://kustomize.io/) tool
 and related tooling.
 
 - More readable, more concise one-liners
-- Automatic linting (with integrated `kubeval`)
-- Easy installation with `pip` (e.g. in combination with `tox`)
-- Cross-platform (ships binaries for supported platforms)
+- Easy linting (with integrated `kubeval`)
+- Integrates into your Python tooling (e.g. use it with `tox`)
+- Automatic download of external Go binaries
+- Cross-platform (installs matching Go binaries on Linux, macOS, Windows)
 
 Installation
 ------------
@@ -84,3 +85,23 @@ Philosophy:
 - Build automatically
 - Kustomize commands become CLI options
 - Kubeval options become CLI options of `lint` command
+
+### Python tox
+
+Add kustomize-wrapper to your `tox.ini`, then Tox takes care of downloading:
+```ini
+[testenv:kubernetes]
+description = Validate Kubernetes manifests
+deps = kustomize-wrapper
+commands =
+    kustomize lint --ignore-missing-schemas {posargs: \
+        deployment/application/overlays/development \
+        deployment/application/overlays/integration \
+        deployment/application/overlays/production \
+    }
+```
+
+Allows you to override arguments: (Use `--` in case you add command line options)
+```console
+tox -e kubernetes -- --fail-fast deployment/application/base
+```

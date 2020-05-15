@@ -120,4 +120,4 @@ def test_fail_gracefully(
         dl.download()
 
     args, kwargs = mock_systemexit.call_args
-    assert args[0].startswith("Writing binary failed:")
+    assert args[0].startswith("Extracting binary failed:")

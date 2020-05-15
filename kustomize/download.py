@@ -35,6 +35,7 @@ def ensure_binary(command):
     Download the command binary if it's not available for execution
     """
     if not binarypath(command).is_file():
+        print(f"Binary for {command} not found. Attempting to download ...")
         GithubReleases(command).download()
 
 
@@ -61,12 +62,15 @@ class GithubReleases:
         return version
 
     def download(self):
-        """Download binary archive and extract binary to target location"""
-        target_directory = binarypath()
+        """
+        Download binary archive and extract binary to target location
+        """
+        print(f"Fetching version information for '{self.name}' ...")
         self.version = self.get_lateststable_version()
         download_url = \
             f"{self.releases}/download/{self.archive_schema}" % self.__dict__
         filename = download_url.split('/')[-1]
+        target_directory = binarypath()
 
         print(f"Downloading {download_url} ...")
         response = requests.get(download_url)
@@ -82,4 +86,5 @@ class GithubReleases:
         try:
             unpack_archive(archive.name, target_directory)
         except OSError as err:
-            raise SystemExit(f"Writing binary failed: {err}")
+            raise SystemExit(f"Extracting binary failed: {err}\n"
+                             "Try installing in --user space.")
