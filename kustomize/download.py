@@ -30,11 +30,16 @@ BINARY_INFO = {
 }
 
 
+def binary_exists(command):
+    """Check existance of binary on file system"""
+    return binarypath(command).is_file()
+
+
 def ensure_binary(command):
     """
     Download the command binary if it's not available for execution
     """
-    if not binarypath(command).is_file():
+    if not binary_exists(command):
         print(f"Binary for {command} not found. Attempting to download ...")
         GithubReleases(command).download()
 

@@ -16,9 +16,11 @@ def main():
 
 
 @main.command()
-def version():
+@click.option('--update', is_flag=True,
+              help='Download latest Go binaries from GitHub')
+def version(update):
     """Show version information of all shipped components"""
-    version_command.version()
+    version_command.version(update)
 
 
 @main.command()

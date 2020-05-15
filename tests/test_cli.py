@@ -79,6 +79,14 @@ def test_version_command():
     assert exit_status == 0
 
 
+def test_version_update_option():
+    """
+    Does command provide the specific option?
+    """
+    exit_status = os.system('kustomize version --update --help')
+    assert exit_status == 0
+
+
 def test_cli():
     """
     Does CLI stop execution w/o a command argument?
