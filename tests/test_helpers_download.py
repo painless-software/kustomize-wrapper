@@ -10,12 +10,12 @@ from unittest.mock import call, patch
 import kustomize
 
 
-@patch('kustomize.download.GithubReleases')
+@patch('kustomize.helpers.download.GithubReleases')
 def test_ensure_binary(mock_downloader):
     """
     Does function trigger download of a non-existing binary?
     """
-    kustomize.download.ensure_binary('foo')
+    kustomize.helpers.download.ensure_binary('foo')
 
     assert mock_downloader.mock_calls == [
         call('foo'),
@@ -27,7 +27,7 @@ def test_kubeval_object():
     """
     Are correct values set in a downloader instance?
     """
-    dl = kustomize.download.GithubReleases('kubeval')
+    dl = kustomize.helpers.download.GithubReleases('kubeval')
 
     assert dl.releases == \
         'https://github.com/instrumenta/kubeval/releases'
@@ -39,7 +39,7 @@ def test_kustomize_object():
     """
     Are correct values set in a downloader instance?
     """
-    dl = kustomize.download.GithubReleases('kustomize')
+    dl = kustomize.helpers.download.GithubReleases('kustomize')
 
     assert dl.releases == \
         'https://github.com/kubernetes-sigs/kustomize/releases'
@@ -60,7 +60,7 @@ def test_lateststable_version():
                 'https://github.com/kubernetes-sigs/kustomize/releases/v1.2.3'
         })
 
-    dl = kustomize.download.GithubReleases('kustomize')
+    dl = kustomize.helpers.download.GithubReleases('kustomize')
     version = dl.get_lateststable_version()
 
     assert version == 'v1.2.3', \
@@ -68,19 +68,19 @@ def test_lateststable_version():
 
 
 @responses.activate
-@patch('kustomize.download.GithubReleases.get_lateststable_version',
+@patch('kustomize.helpers.download.GithubReleases.get_lateststable_version',
        return_value='v1.2.3')
-@patch('kustomize.download.unpack_archive')
-@patch('kustomize.download.NamedTemporaryFile')
+@patch('kustomize.helpers.download.unpack_archive')
+@patch('kustomize.helpers.download.NamedTemporaryFile')
 def test_download(mock_tempfile, mock_unpackarchive, mock_version):
     """
     Do we try to download the archive and extract it locally?
     """
-    dl = kustomize.download.GithubReleases('kustomize')
+    dl = kustomize.helpers.download.GithubReleases('kustomize')
     dl.version = 'v1.2.3'
     dl_url = f"{dl.releases}/download/{dl.archive_schema}" % dl.__dict__
     dl_archive = dl_url.split('/')[-1]
-    dl_targetdir = kustomize.binaries.binarypath()
+    dl_targetdir = kustomize.helpers.binaries.binarypath()
 
     assert 'kustomize/v1.2.3/kustomize_v1.2.3_' in dl_url, \
         "Unexpected URL; mocked request will likely fail"
@@ -99,16 +99,17 @@ def test_download(mock_tempfile, mock_unpackarchive, mock_version):
 
 @responses.activate
 @patch('builtins.SystemExit', side_effect=KeyboardInterrupt)
-@patch('kustomize.download.GithubReleases.get_lateststable_version',
+@patch('kustomize.helpers.download.GithubReleases.get_lateststable_version',
        return_value='v1.2.3')
-@patch('kustomize.download.unpack_archive', side_effect=PermissionError)
-@patch('kustomize.download.NamedTemporaryFile')
+@patch('kustomize.helpers.download.unpack_archive',
+       side_effect=PermissionError)
+@patch('kustomize.helpers.download.NamedTemporaryFile')
 def test_fail_gracefully(
         mock_tempfile, mock_unpackarchive, mock_version, mock_systemexit):
     """
     If download or extraction fails we need to fail nicely.
     """
-    dl = kustomize.download.GithubReleases('kustomize')
+    dl = kustomize.helpers.download.GithubReleases('kustomize')
     dl.version = 'v1.2.3'
     dl_url = f"{dl.releases}/download/{dl.archive_schema}" % dl.__dict__
     responses.add(responses.GET, dl_url)

@@ -3,8 +3,8 @@ Perform validation of manifest built by kustomize
 """
 import sys
 
-from ..binaries import binarypath, shell
-from ..download import ensure_binary
+from ..helpers.binaries import binarypath, shell
+from ..helpers.download import ensure_binary
 
 
 def lint(folders, edit, fail_fast, force_color, ignore_missing_schemas):

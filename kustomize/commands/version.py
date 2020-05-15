@@ -4,8 +4,8 @@ Supply version information of all components
 import sys
 
 from .. import __version__
-from ..binaries import binarypath, run_piped_commands
-from ..download import binary_exists, ensure_binary
+from ..helpers.binaries import binarypath, run_piped_commands
+from ..helpers.download import binary_exists, ensure_binary
 
 
 def version(update=False):

@@ -1,8 +1,8 @@
 """
 Build manifest with kustomize
 """
-from ..binaries import binarypath, shell
-from ..download import ensure_binary
+from ..helpers.binaries import binarypath, shell
+from ..helpers.download import ensure_binary
 
 
 def build(folders, edit):
