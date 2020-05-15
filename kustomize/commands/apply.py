@@ -1,8 +1,8 @@
 """
 Apply manifest built by kustomize
 """
-from ..binaries import binarypath, shell
-from ..download import ensure_binary
+from ..helpers.binaries import binarypath, shell
+from ..helpers.download import ensure_binary
 
 
 def apply(folders, edit):
