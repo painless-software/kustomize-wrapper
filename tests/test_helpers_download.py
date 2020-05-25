@@ -1,6 +1,7 @@
 """
 Tests for the download helper module
 """
+import pathlib
 import platform
 import pytest
 import responses
@@ -8,6 +9,23 @@ import responses
 from unittest.mock import call, patch
 
 import kustomize
+
+
+def test_binary_versions_in_readme():
+    """
+    Have the binary version badges been updated in the README?
+    """
+    project_readme = pathlib.Path(__file__).parent.parent / 'README.md'
+    kubeval_version = \
+        kustomize.helpers.download.GithubReleases('kubeval').version
+    kustomize_version = \
+        kustomize.helpers.download.GithubReleases('kustomize').version
+
+    with project_readme.open() as document:
+        readme = document.read()
+
+    assert readme.count(kubeval_version) == 2
+    assert readme.count(kustomize_version) == 2
 
 
 @patch('kustomize.helpers.download.GithubReleases')
@@ -33,6 +51,12 @@ def test_kubeval_object():
         'https://github.com/instrumenta/kubeval/releases'
     assert dl.binary == (
         'kubeval.exe' if platform.system() == 'Windows' else 'kubeval')
+    assert dl.version == \
+        kustomize.helpers.download.BINARY_INFO['kubeval']['version']
+
+    assert dl.download_url.startswith(dl.releases)
+    assert dl.version in dl.download_url
+    assert dl.name in dl.download_url
 
 
 def test_kustomize_object():
@@ -45,47 +69,29 @@ def test_kustomize_object():
         'https://github.com/kubernetes-sigs/kustomize/releases'
     assert dl.binary == (
         'kustomize.exe' if platform.system() == 'Windows' else 'kustomize')
+    assert dl.version == \
+        kustomize.helpers.download.BINARY_INFO['kustomize']['version']
+
+    assert dl.download_url.startswith(dl.releases)
+    assert dl.version in dl.download_url
+    assert dl.name in dl.download_url
 
 
 @responses.activate
-def test_lateststable_version():
-    """
-    Do we extract version string correctly from the GitHub API response?
-    """
-    responses.add(
-        responses.HEAD,
-        'https://github.com/kubernetes-sigs/kustomize/releases/latest',
-        headers={
-            'location':
-                'https://github.com/kubernetes-sigs/kustomize/releases/v1.2.3'
-        })
-
-    dl = kustomize.helpers.download.GithubReleases('kustomize')
-    version = dl.get_lateststable_version()
-
-    assert version == 'v1.2.3', \
-        "Version is not properly extracted from GitHub response"
-
-
-@responses.activate
-@patch('kustomize.helpers.download.GithubReleases.get_lateststable_version',
-       return_value='v1.2.3')
 @patch('kustomize.helpers.download.unpack_archive')
 @patch('kustomize.helpers.download.NamedTemporaryFile')
-def test_download(mock_tempfile, mock_unpackarchive, mock_version):
+def test_download(mock_tempfile, mock_unpackarchive):
     """
     Do we try to download the archive and extract it locally?
     """
     dl = kustomize.helpers.download.GithubReleases('kustomize')
-    dl.version = 'v1.2.3'
-    dl_url = f"{dl.releases}/download/{dl.archive_schema}" % dl.__dict__
-    dl_archive = dl_url.split('/')[-1]
+    dl_archive = dl.download_url.split('/')[-1]
     dl_targetdir = kustomize.helpers.binaries.binarypath()
 
-    assert 'kustomize/v1.2.3/kustomize_v1.2.3_' in dl_url, \
-        "Unexpected URL; mocked request will likely fail"
+    assert 'kustomize/v3.5.5/kustomize_v3.5.5_' in dl.download_url, \
+        f"Unexpected URL; mocked request will likely fail:\n{dl.download_url}"
 
-    responses.add(responses.GET, dl_url)
+    responses.add(responses.GET, dl.download_url)
     dl.download()
 
     args, kwargs = mock_tempfile.call_args
@@ -99,23 +105,19 @@ def test_download(mock_tempfile, mock_unpackarchive, mock_version):
 
 @responses.activate
 @patch('builtins.SystemExit', side_effect=KeyboardInterrupt)
-@patch('kustomize.helpers.download.GithubReleases.get_lateststable_version',
-       return_value='v1.2.3')
 @patch('kustomize.helpers.download.unpack_archive',
        side_effect=PermissionError)
 @patch('kustomize.helpers.download.NamedTemporaryFile')
 def test_fail_gracefully(
-        mock_tempfile, mock_unpackarchive, mock_version, mock_systemexit):
+        mock_tempfile, mock_unpackarchive, mock_systemexit):
     """
     If download or extraction fails we need to fail nicely.
     """
     dl = kustomize.helpers.download.GithubReleases('kustomize')
-    dl.version = 'v1.2.3'
-    dl_url = f"{dl.releases}/download/{dl.archive_schema}" % dl.__dict__
-    responses.add(responses.GET, dl_url)
+    responses.add(responses.GET, dl.download_url)
 
-    assert 'kustomize/v1.2.3/kustomize_v1.2.3_' in dl_url, \
-        "Unexpected URL; mocked request will likely fail"
+    assert 'kustomize/v3.5.5/kustomize_v3.5.5_' in dl.download_url, \
+        f"Unexpected URL; mocked request will likely fail:\n{dl.download_url}"
 
     with pytest.raises(KeyboardInterrupt):
         dl.download()

@@ -12,6 +12,7 @@ from .binaries import binarypath
 
 BINARY_INFO = {
     'kubeval': {
+        'version': '0.15.0',
         'repo': 'https://github.com/instrumenta/kubeval',
         'archive': {
             'linux': '%(version)s/%(name)s-%(platform)s-amd64.tar.gz',
@@ -20,6 +21,7 @@ BINARY_INFO = {
         },
     },
     'kustomize': {
+        'version': 'v3.5.5',
         'repo': 'https://github.com/kubernetes-sigs/kustomize',
         'archive': {
             'linux': '%(name)s/%(version)s/%(name)s_%(version)s_%(platform)s_amd64.tar.gz',
@@ -54,40 +56,39 @@ class GithubReleases:
 
         self.releases = f"{repo_url}/releases"
         self.platform = platform.system().lower()
-        self.archive_schema = binary_info['archive'][self.platform]
         self.binary = binary_name + (
             '.exe' if self.platform == 'windows' else '')
         self.name = binary_name
-        self.version = None
-
-    def get_lateststable_version(self):
-        """Find out latest version number via the 'latest' location"""
-        response = requests.head(f"{self.releases}/latest")
-        version = response.headers['location'].split('/')[-1]
-        return version
+        self.version = binary_info['version']
+        archive_schema = binary_info['archive'][self.platform]
+        self.download_url = \
+            f"{self.releases}/download/{archive_schema}" % self.__dict__
 
     def download(self):
         """
         Download binary archive and extract binary to target location
         """
-        print(f"Fetching version information for '{self.name}' ...")
-        self.version = self.get_lateststable_version()
-        download_url = \
-            f"{self.releases}/download/{self.archive_schema}" % self.__dict__
-        filename = download_url.split('/')[-1]
-        target_directory = binarypath()
+        print(f"Downloading {self.download_url} ...")
+        archive = self.fetch_archive()
 
-        print(f"Downloading {download_url} ...")
-        response = requests.get(download_url)
+        print(f"Extracting from {archive.name}: {binarypath() / self.binary}")
+        self.extract_binary(archive)
+
+    def fetch_archive(self):
+        """Fetch the release archive from GitHub"""
+        response = requests.get(self.download_url)
+        filename = self.download_url.split('/')[-1]
         try:
             archive = NamedTemporaryFile(suffix=filename, delete=False)
             archive.write(response.content)
             archive.close()
         except OSError as err:
             raise SystemExit(f"Download failed: {err}")
+        return archive
 
-        print(f"Extracting from {archive.name}:"
-              f" {target_directory / self.binary}")
+    def extract_binary(self, archive):
+        """Unpack the binary we want from the downloaded archive"""
+        target_directory = binarypath()
         try:
             unpack_archive(archive.name, target_directory, self.binary)
         except Exception as err:

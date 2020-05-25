@@ -32,7 +32,7 @@ def version(update=False):
 
 
 def download_binaries():
-    """Ensure latest Go binaries are installed"""
+    """Ensure Go binaries are installed"""
     kustomize_binary = binarypath('kustomize')
     kubeval_binary = binarypath('kubeval')
 
