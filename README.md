@@ -7,11 +7,11 @@ Kustomize Wrapper [![latest-version](
   https://img.shields.io/travis/painless-software/kustomize-wrapper/master.svg?logo=travis)](
   https://travis-ci.org/painless-software/kustomize-wrapper)
 [![kustomize](
-  https://img.shields.io/badge/kustomize-latest-5d8bee.svg?logo=kubernetes)](
-  https://github.com/kubernetes-sigs/kustomize/releases/latest)
+  https://img.shields.io/badge/kustomize-v3.5.5-5d8bee.svg?logo=kubernetes)](
+  https://github.com/kubernetes-sigs/kustomize/releases/kustomize%2Fv3.5.5)
 [![kubeval](
-  https://img.shields.io/badge/kubeval-latest-3f51b5.svg?logo=kubernetes)](
-  https://github.com/instrumenta/kubeval/releases/latest)
+  https://img.shields.io/badge/kubeval-0.15.0-3f51b5.svg?logo=kubernetes)](
+  https://github.com/instrumenta/kubeval/releases/0.15.0)
 [![python-support](
   https://img.shields.io/pypi/pyversions/kustomize-wrapper.svg)](
   https://pypi.org/project/kustomize-wrapper)
@@ -94,7 +94,7 @@ Add kustomize-wrapper to your `tox.ini`, then Tox takes care of downloading:
 description = Validate Kubernetes manifests
 deps = kustomize-wrapper
 commands =
-    kustomize lint --ignore-missing-schemas {posargs: \
+    kustomize lint {posargs:--ignore-missing-schemas --fail-fast \
         deployment/application/overlays/development \
         deployment/application/overlays/integration \
         deployment/application/overlays/production \
