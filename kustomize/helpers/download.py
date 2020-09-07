@@ -21,7 +21,7 @@ BINARY_INFO = {
         },
     },
     'kustomize': {
-        'version': 'v3.5.5',
+        'version': 'v3.8.2',
         'repo': 'https://github.com/kubernetes-sigs/kustomize',
         'archive': {
             'linux': '%(name)s/%(version)s/%(name)s_%(version)s_%(platform)s_amd64.tar.gz',
@@ -83,7 +83,7 @@ class GithubReleases:
             archive.write(response.content)
             archive.close()
         except OSError as err:
-            raise SystemExit(f"Download failed: {err}")
+            raise SystemExit(f"Download failed: {err}") from err
         return archive
 
     def extract_binary(self, archive):
@@ -93,4 +93,4 @@ class GithubReleases:
             unpack_archive(archive.name, target_directory, self.binary)
         except Exception as err:
             raise SystemExit(f"Extracting binary failed: {err}\n"
-                             "Try installing in --user space.")
+                             "Try installing in --user space.") from err

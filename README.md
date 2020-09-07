@@ -7,8 +7,8 @@ Kustomize Wrapper [![latest-version](
   https://img.shields.io/travis/painless-software/kustomize-wrapper/master.svg?logo=travis)](
   https://travis-ci.org/painless-software/kustomize-wrapper)
 [![kustomize](
-  https://img.shields.io/badge/kustomize-v3.5.5-5d8bee.svg?logo=kubernetes)](
-  https://github.com/kubernetes-sigs/kustomize/releases/kustomize%2Fv3.5.5)
+  https://img.shields.io/badge/kustomize-v3.8.2-5d8bee.svg?logo=kubernetes)](
+  https://github.com/kubernetes-sigs/kustomize/releases/kustomize%2Fv3.8.2)
 [![kubeval](
   https://img.shields.io/badge/kubeval-0.15.0-3f51b5.svg?logo=kubernetes)](
   https://github.com/instrumenta/kubeval/releases/0.15.0)

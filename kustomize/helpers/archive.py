@@ -22,8 +22,9 @@ def unpack_archive(filename, extract_dir, *files):
     filetype = get_file_extension(filename)
     try:
         archive_method[filetype](filename, extract_dir, *files)
-    except KeyError:
-        raise NotImplementedError(f"Archive not supported: {filetype}")
+    except KeyError as err:
+        raise NotImplementedError(f"Archive not supported: {filetype}") \
+            from err
 
 
 def unpack_tar_archive(filename, extract_dir, *files):
@@ -46,7 +47,7 @@ def get_file_extension(filename):
     """
     Reliably determine relevant file extension of archive
 
-    >>> get_file_extension("/tmp/foo_v3.5.5_linux_amd64.tgz")
+    >>> get_file_extension("/tmp/foo_v3.8.2_linux_amd64.tgz")
     '.tgz'
     >>> get_file_extension("/tmp/foo_v1.2.3_darwin.1.212.tar.gz")
     '.tar.gz'
