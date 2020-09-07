@@ -3,9 +3,12 @@ Kustomize Wrapper [![latest-version](
   https://pypi.org/project/kustomize-wrapper)
 =================
 
-[![travis-build](
-  https://img.shields.io/travis/painless-software/kustomize-wrapper/master.svg?logo=travis)](
-  https://travis-ci.org/painless-software/kustomize-wrapper)
+[![checks-status](
+  https://img.shields.io/github/workflow/status/painless-software/kustomize-wrapper/Checks/master?label=Checks&logo=github)](
+  https://github.com/painless-software/kustomize-wrapper/actions?query=workflow%3AChecks)
+[![tests-status](
+  https://img.shields.io/github/workflow/status/painless-software/kustomize-wrapper/Tests/master?label=Tests&logo=github)](
+  https://github.com/painless-software/kustomize-wrapper/actions?query=workflow%3ATests)
 [![kustomize](
   https://img.shields.io/badge/kustomize-v3.8.2-5d8bee.svg?logo=kubernetes)](
   https://github.com/kubernetes-sigs/kustomize/releases/kustomize%2Fv3.8.2)
