@@ -4,6 +4,7 @@ Tests for the version command module
 import pytest
 
 from cli_test_helpers import ArgvContext
+from platform import python_version
 from unittest.mock import call, patch
 
 import kustomize
@@ -40,11 +41,12 @@ def test_explain_when_missing(mock_binaryexists, mock_print):
     """
     kustomize_binary = kustomize.commands.version.binarypath('kustomize')
     kubeval_binary = kustomize.commands.version.binarypath('kubeval')
+    version = python_version()
 
     kustomize.commands.version.version()
 
     assert mock_print.mock_calls == [
-        call(f"kustomize-wrapper {kustomize.__version__}"),
+        call(f"kustomize-wrapper {kustomize.__version__} (Python {version})"),
         call(f"Go binary {kustomize_binary} not available."),
         call(f"Go binary {kubeval_binary} not available."),
     ]
