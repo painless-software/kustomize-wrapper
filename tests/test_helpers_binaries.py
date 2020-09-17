@@ -4,6 +4,7 @@ Tests for the binaries helper module
 import os
 import sys
 
+from pathlib import Path
 from unittest.mock import patch
 
 import kustomize
@@ -18,7 +19,7 @@ def test_binarypath(mock_platform):
     sys.prefix = '/some/path'
 
     path = kustomize.helpers.binaries.binarypath('foo')
-    assert str(path) == '/some/path/local/bin/foo'
+    assert path == Path('/') / 'some' / 'path' / 'local' / 'bin' / 'foo'
 
     sys.prefix = old_prefix
 
