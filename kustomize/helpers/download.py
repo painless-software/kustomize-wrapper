@@ -22,7 +22,7 @@ BINARY_INFO = {
         },
     },
     'kustomize': {
-        'version': 'v3.8.2',
+        'version': 'v3.8.4',
         'repo': 'https://github.com/kubernetes-sigs/kustomize',
         'archive': {
             'linux': '%(name)s/%(version)s/%(name)s_%(version)s_%(platform)s_amd64.tar.gz',
