@@ -24,21 +24,10 @@ def test_binary_versions_in_readme():
     with project_readme.open() as document:
         readme = document.read()
 
-    assert readme.count(kubeval_version) == 2
-    assert readme.count(kustomize_version) == 2
-
-
-@patch('kustomize.helpers.download.GithubReleases')
-def test_ensure_binary(mock_downloader):
-    """
-    Does function trigger download of a non-existing binary?
-    """
-    kustomize.helpers.download.ensure_binary('foo')
-
-    assert mock_downloader.mock_calls == [
-        call('foo'),
-        call().download(),
-    ]
+    assert readme.count(kubeval_version) == 2, \
+        f"README badge doesn't match Kubeval version {kubeval_version}"
+    assert readme.count(kustomize_version) == 2, \
+        f"README badge doesn't match Kustomize version {kustomize_version}"
 
 
 def test_kubeval_object():
@@ -86,7 +75,6 @@ def test_download(mock_tempfile, mock_unpackarchive):
     """
     dl = kustomize.helpers.download.GithubReleases('kustomize')
     dl_archive = dl.download_url.split('/')[-1]
-    dl_targetdir = kustomize.helpers.binaries.binarypath()
 
     assert 'kustomize/v3.8.2/kustomize_v3.8.2_' in dl.download_url, \
         f"Unexpected URL; mocked request will likely fail:\n{dl.download_url}"
@@ -99,7 +87,7 @@ def test_download(mock_tempfile, mock_unpackarchive):
         "Download of archive not attempted correctly"
 
     args, kwargs = mock_unpackarchive.call_args
-    assert args[1] == dl_targetdir, \
+    assert args[1] == kustomize.helpers.download.DOWNLOAD_PATH, \
         "Extraction to binaries folder not attempted correctly"
 
 
@@ -124,3 +112,31 @@ def test_fail_gracefully(
 
     args, kwargs = mock_systemexit.call_args
     assert args[0].startswith("Extracting binary failed:")
+
+
+@patch('builtins.print')
+@patch('kustomize.helpers.download.GithubReleases')
+@patch('pathlib.Path.unlink')
+def test_update_binary_delete(mock_unlink, mock_downloader, mock_print):
+    """
+    Is deletion of local binary attempted before download?
+    """
+    kustomize.helpers.download.update_binary('foo')
+
+    mock_unlink.called, "Deletion is not attempted"
+    mock_print.mock_calls == [call('Go binary foo removed.')]
+    mock_downloader.called, "Download is not attempted"
+
+
+@patch('builtins.print')
+@patch('kustomize.helpers.download.GithubReleases')
+@patch('pathlib.Path.unlink', side_effect=OSError)
+def test_report_deletefailed(mock_unlink, mock_downloader, mock_print):
+    """
+    Do we handle errors gracefully?
+    """
+    kustomize.helpers.download.update_binary('foo')
+
+    args, _ = mock_print.call_args_list[0]
+    binarypath = kustomize.helpers.download.DOWNLOAD_PATH / 'foo'
+    assert args[0].split(' failed. ')[0] == f"Deleting {binarypath}"

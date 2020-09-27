@@ -20,9 +20,9 @@ def test_cli_command(mock_command):
     assert mock_command.called
 
 
-@patch('kustomize.commands.lint.ensure_binary')
+@patch('kustomize.commands.lint.binarypath')
 @patch('builtins.print')
-def test_fail_fast(mock_print, mock_ensurebinary):
+def test_fail_fast(mock_print, mock_binarypath):
     """
     Is the correct code called when invoked with option?
     """
@@ -34,9 +34,9 @@ def test_fail_fast(mock_print, mock_ensurebinary):
     assert args == ('Validation of your manifests FAILED.',)
 
 
-@patch('kustomize.commands.lint.ensure_binary')
+@patch('kustomize.commands.lint.binarypath')
 @patch('kustomize.commands.lint.shell')
-def test_uses_shell(mock_shell, mock_ensurebinary):
+def test_uses_shell(mock_shell, mock_binarypath):
     """
     Does command use the shell function to run commands?
     """
@@ -47,9 +47,9 @@ def test_uses_shell(mock_shell, mock_ensurebinary):
                                      force_color=False,
                                      ignore_missing_schemas=False)
 
-    assert mock_ensurebinary.mock_calls == [
-        call('kustomize'),
-        call('kubeval'),
+    assert mock_binarypath.mock_calls[:2] == [
+        call('kustomize', download_if_missing=True),
+        call('kubeval', download_if_missing=True),
     ], "We don't ensure all binaries are available"
 
     assert mock_shell.call_count == 3, \

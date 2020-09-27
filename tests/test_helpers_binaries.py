@@ -2,26 +2,30 @@
 Tests for the binaries helper module
 """
 import os
-import sys
+import pytest
 
-from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 import kustomize
 
 
-@patch('platform.system', return_value='Linux')
-def test_binarypath(mock_platform):
+@patch('builtins.print')
+@patch('shutil.which', return_value=None)
+@patch('kustomize.helpers.binaries.GithubReleases')
+def test_binarypath_download_missing(mock_downloader, mock_which, mock_print):
     """
-    Is path to shipped binaries calculated properly?
+    Does function trigger download of a non-existing binary?
     """
-    old_prefix = sys.prefix
-    sys.prefix = '/some/path'
+    with pytest.raises(FileNotFoundError):
+        kustomize.helpers.binaries.binarypath('foo', download_if_missing=True)
 
-    path = kustomize.helpers.binaries.binarypath('foo')
-    assert path == Path('/') / 'some' / 'path' / 'local' / 'bin' / 'foo'
-
-    sys.prefix = old_prefix
+    assert mock_print.mock_calls == [
+        call('Binary for foo not found. Attempting download ...'),
+    ]
+    assert mock_downloader.mock_calls == [
+        call('foo'),
+        call().download(),
+    ]
 
 
 @patch('kustomize.helpers.binaries.run')
@@ -42,7 +46,7 @@ def test_shell_command(mock_run_piped_commands, mock_print):
     """
     Is command printed and then executed?
     """
-    executable = kustomize.helpers.binaries.binarypath('foo')
+    executable = kustomize.helpers.download.DOWNLOAD_PATH / 'foo'
     exec_location = str(executable.parent) + os.path.sep
     shell_command = f"{executable} --bar | {executable} baz"
     kustomize.helpers.binaries.shell(shell_command)
