@@ -1,22 +1,40 @@
 """
 Helper functions managing the included external binaries
 """
+import errno
 import os
-import pathlib
-import platform
+import shutil
 import sys
 
+from pathlib import Path
 from subprocess import CalledProcessError, CompletedProcess, PIPE, run
 
+from .download import DOWNLOAD_PATH, GithubReleases
 
-def binarypath(command=''):
+
+def binarypath(command='', download_if_missing=False):
     """
     Return the full path of an external binary used by this package.
     Also appends the ".exe" extension if we're running on Windows.
     """
-    binary_folder = pathlib.Path(sys.prefix) / 'local' / 'bin'
-    command += '.exe' if platform.system() == 'Windows' else ''
-    return binary_folder / command
+    usr_local_bin = str(Path('/') / 'usr' / 'local' / 'bin')
+    search_path = os.pathsep.join(
+        [str(DOWNLOAD_PATH)] +
+        os.defpath.split(os.pathsep) +
+        [usr_local_bin])
+
+    found = shutil.which(command, path=search_path)
+
+    if download_if_missing and not found:
+        print(f"Binary for {command} not found. Attempting download ...")
+        GithubReleases(command).download()
+        found = shutil.which(command, path=search_path)
+
+    if not found:
+        err_message = f"Go binary not found in paths {search_path}"
+        raise FileNotFoundError(errno.ENOENT, err_message, command)
+
+    return Path(found)
 
 
 def run_piped_commands(commands: list) -> CompletedProcess:
@@ -50,7 +68,7 @@ def shell(shell_command):
     """
     Run a shell command with pipes and print it out, beautified, beforehand
     """
-    location = str(binarypath()) + os.path.sep
+    location = str(DOWNLOAD_PATH) + os.path.sep
     beautified_command = shell_command.replace(location, '')
     print(beautified_command)
 
