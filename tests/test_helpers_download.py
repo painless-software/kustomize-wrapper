@@ -76,7 +76,7 @@ def test_download(mock_tempfile, mock_unpackarchive):
     dl = kustomize.helpers.download.GithubReleases('kustomize')
     dl_archive = dl.download_url.split('/')[-1]
 
-    assert 'kustomize/v3.8.2/kustomize_v3.8.2_' in dl.download_url, \
+    assert 'kustomize/v3.8.4/kustomize_v3.8.4_' in dl.download_url, \
         f"Unexpected URL; mocked request will likely fail:\n{dl.download_url}"
 
     responses.add(responses.GET, dl.download_url)
@@ -104,7 +104,7 @@ def test_fail_gracefully(
     dl = kustomize.helpers.download.GithubReleases('kustomize')
     responses.add(responses.GET, dl.download_url)
 
-    assert 'kustomize/v3.8.2/kustomize_v3.8.2_' in dl.download_url, \
+    assert 'kustomize/v3.8.4/kustomize_v3.8.4_' in dl.download_url, \
         f"Unexpected URL; mocked request will likely fail:\n{dl.download_url}"
 
     with pytest.raises(KeyboardInterrupt):
