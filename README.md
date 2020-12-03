@@ -10,8 +10,8 @@ Kustomize Wrapper [![latest-version](
   https://img.shields.io/github/workflow/status/painless-software/kustomize-wrapper/Tests/master?label=Tests&logo=github)](
   https://github.com/painless-software/kustomize-wrapper/actions?query=workflow%3ATests)
 [![kustomize](
-  https://img.shields.io/badge/kustomize-v3.8.4-5d8bee.svg?logo=kubernetes)](
-  https://github.com/kubernetes-sigs/kustomize/releases/kustomize%2Fv3.8.4)
+  https://img.shields.io/badge/kustomize-v3.8.7-5d8bee.svg?logo=kubernetes)](
+  https://github.com/kubernetes-sigs/kustomize/releases/kustomize%2Fv3.8.7)
 [![kubeval](
   https://img.shields.io/badge/kubeval-0.15.0-3f51b5.svg?logo=kubernetes)](
   https://github.com/instrumenta/kubeval/releases/0.15.0)
