@@ -4,10 +4,10 @@ Kustomize Wrapper [![latest-version](
 =================
 
 [![checks-status](
-  https://img.shields.io/github/workflow/status/painless-software/kustomize-wrapper/Checks/master?label=Checks&logo=github)](
+  https://img.shields.io/github/workflow/status/painless-software/kustomize-wrapper/Checks/main?label=Checks&logo=github)](
   https://github.com/painless-software/kustomize-wrapper/actions?query=workflow%3AChecks)
 [![tests-status](
-  https://img.shields.io/github/workflow/status/painless-software/kustomize-wrapper/Tests/master?label=Tests&logo=github)](
+  https://img.shields.io/github/workflow/status/painless-software/kustomize-wrapper/Tests/main?label=Tests&logo=github)](
   https://github.com/painless-software/kustomize-wrapper/actions?query=workflow%3ATests)
 [![kustomize](
   https://img.shields.io/badge/kustomize-v3.8.7-5d8bee.svg?logo=kubernetes)](
@@ -20,7 +20,7 @@ Kustomize Wrapper [![latest-version](
   https://pypi.org/project/kustomize-wrapper)
 [![license](
   https://img.shields.io/pypi/l/kustomize-wrapper.svg)](
-  https://github.com/painless-software/kustomize-wrapper/blob/master/LICENSE)
+  https://github.com/painless-software/kustomize-wrapper/blob/main/LICENSE)
 
 A Python wrapper for the Kubernetes [Kustomize](https://kustomize.io/) tool
 and related tooling.
