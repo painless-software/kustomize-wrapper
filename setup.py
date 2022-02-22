@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Packaging for example CLI tool
+Packaging for kustomize-wrapper CLI
 """
+from pathlib import Path
 from setuptools import setup, find_packages
 
 import kustomize as package
@@ -9,14 +10,15 @@ import kustomize as package
 
 def read_file(filename):
     """Fetch the contents of a file"""
-    with open(filename) as file:
+    filepath = Path(__file__).resolve().parent / filename
+    with open(filepath, encoding='utf-8') as file:
         return file.read()
 
 
 setup(
     name='kustomize-wrapper',
     version=package.__version__,
-    description=package.__doc__.strip().split('\n')[0],
+    description=package.__doc__.strip().split('\n', maxsplit=1)[0],
     long_description=read_file('README.md'),
     long_description_content_type='text/markdown',
     url=package.__url__,

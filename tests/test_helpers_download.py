@@ -73,10 +73,12 @@ def test_download(mock_tempfile, mock_unpackarchive):
     """
     Do we try to download the archive and extract it locally?
     """
-    dl = kustomize.helpers.download.GithubReleases('kustomize')
+    binary = 'kustomize'
+    version = kustomize.helpers.download.GithubReleases(binary).version
+    dl = kustomize.helpers.download.GithubReleases(binary)
     dl_archive = dl.download_url.split('/')[-1]
 
-    assert 'kustomize/v3.8.7/kustomize_v3.8.7_' in dl.download_url, \
+    assert f"{binary}/{version}/{binary}_{version}_" in dl.download_url, \
         f"Unexpected URL; mocked request will likely fail:\n{dl.download_url}"
 
     responses.add(responses.GET, dl.download_url)
@@ -101,10 +103,12 @@ def test_fail_gracefully(
     """
     If download or extraction fails we need to fail nicely.
     """
-    dl = kustomize.helpers.download.GithubReleases('kustomize')
+    binary = 'kustomize'
+    version = kustomize.helpers.download.GithubReleases(binary).version
+    dl = kustomize.helpers.download.GithubReleases(binary)
     responses.add(responses.GET, dl.download_url)
 
-    assert 'kustomize/v3.8.7/kustomize_v3.8.7_' in dl.download_url, \
+    assert f"{binary}/{version}/{binary}_{version}_" in dl.download_url, \
         f"Unexpected URL; mocked request will likely fail:\n{dl.download_url}"
 
     with pytest.raises(KeyboardInterrupt):

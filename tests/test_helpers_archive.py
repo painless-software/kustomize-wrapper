@@ -38,9 +38,10 @@ def test_untar_files(mock_tarfile):
 
     assert mock_tarfile.mock_calls == [
         call('foobar.tar.gz'),
-        call().extract('hello.sh', '/tmp'),
-        call().extract('LICENSE', '/tmp'),
-        call().close(),
+        call().__enter__(),
+        call().__enter__().extract('hello.sh', '/tmp'),
+        call().__enter__().extract('LICENSE', '/tmp'),
+        call().__exit__(None, None, None),
     ]
 
 
@@ -54,7 +55,8 @@ def test_unzip_files(mock_zipfile):
 
     assert mock_zipfile.mock_calls == [
         call('foobar.zip'),
-        call().extract('afile.exe', '/tmp'),
-        call().extract('README.md', '/tmp'),
-        call().close(),
+        call().__enter__(),
+        call().__enter__().extract('afile.exe', '/tmp'),
+        call().__enter__().extract('README.md', '/tmp'),
+        call().__exit__(None, None, None),
     ]

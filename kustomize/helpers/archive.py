@@ -29,18 +29,16 @@ def unpack_archive(filename, extract_dir, *files):
 
 def unpack_tar_archive(filename, extract_dir, *files):
     """Unpack files from a Tar archive"""
-    archive = tarfile.open(filename)
-    for member in files:
-        archive.extract(member, extract_dir)
-    archive.close()
+    with tarfile.open(filename) as archive:
+        for member in files:
+            archive.extract(member, extract_dir)
 
 
 def unpack_zip_archive(filename, extract_dir, *files):
     """Unpack files from a Zip archive"""
-    archive = zipfile.ZipFile(filename)
-    for member in files:
-        archive.extract(member, extract_dir)
-    archive.close()
+    with zipfile.ZipFile(filename) as archive:
+        for member in files:
+            archive.extract(member, extract_dir)
 
 
 def get_file_extension(filename):

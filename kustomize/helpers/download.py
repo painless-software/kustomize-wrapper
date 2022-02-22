@@ -13,7 +13,7 @@ from .archive import unpack_archive
 
 BINARY_INFO = {
     'kubeval': {
-        'version': '0.15.0',
+        'version': 'v0.16.1',
         'repo': 'https://github.com/instrumenta/kubeval',
         'archive': {
             'linux': '%(version)s/%(name)s-%(platform)s-amd64.tar.gz',
@@ -22,7 +22,7 @@ BINARY_INFO = {
         },
     },
     'kustomize': {
-        'version': 'v3.8.7',
+        'version': 'v4.5.2',
         'repo': 'https://github.com/kubernetes-sigs/kustomize',
         'archive': {
             'linux': '%(name)s/%(version)s/%(name)s_%(version)s_%(platform)s_amd64.tar.gz',
@@ -68,9 +68,8 @@ class GithubReleases:
         response = requests.get(self.download_url)
         filename = self.download_url.split('/')[-1]
         try:
-            archive = NamedTemporaryFile(suffix=filename, delete=False)
-            archive.write(response.content)
-            archive.close()
+            with NamedTemporaryFile(suffix=filename, delete=False) as archive:
+                archive.write(response.content)
         except OSError as err:
             raise SystemExit(f"Download failed: {err}") from err
         return archive
