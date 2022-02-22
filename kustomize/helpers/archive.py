@@ -45,11 +45,11 @@ def get_file_extension(filename):
     """
     Reliably determine relevant file extension of archive
 
-    >>> get_file_extension("/tmp/foo_v3.8.2_linux_amd64.tgz")
+    >>> get_file_extension("/opt/foo_v3.8.2_linux_amd64.tgz")
     '.tgz'
-    >>> get_file_extension("/tmp/foo_v1.2.3_darwin.1.212.tar.gz")
+    >>> get_file_extension("/opt/foo_v1.2.3_darwin.1.212.tar.gz")
     '.tar.gz'
-    >>> get_file_extension("/tmp/2020.12.31_windows.1.007.zip")
+    >>> get_file_extension("/opt/2020.12.31_windows.1.007.zip")
     '.zip'
     """
     ext_list = pathlib.Path(filename).suffixes
