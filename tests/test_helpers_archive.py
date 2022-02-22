@@ -1,9 +1,9 @@
 """
 Tests for the archive helper module
 """
-import pytest
-
 from unittest.mock import call, patch
+
+import pytest
 
 import kustomize
 

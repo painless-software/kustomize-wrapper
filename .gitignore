@@ -1,5 +1,8 @@
+/.coverage
 /.tox/
 /build/
 /dist/
 /kustomize-wrapper-*/
 /*.egg-info/
+/tests/*-report.json
+/tests/*-report.xml

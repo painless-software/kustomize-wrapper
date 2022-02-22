@@ -2,6 +2,7 @@
 Tests for command line interface (CLI)
 """
 import os
+
 import pytest
 
 import kustomize

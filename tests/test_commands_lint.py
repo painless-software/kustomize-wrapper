@@ -1,10 +1,10 @@
 """
 Tests for the lint command module
 """
-import pytest
-
-from cli_test_helpers import ArgvContext
 from unittest.mock import call, patch
+
+import pytest
+from cli_test_helpers import ArgvContext
 
 import kustomize
 

@@ -2,9 +2,9 @@
 Tests for the binaries helper module
 """
 import os
-import pytest
-
 from unittest.mock import call, patch
+
+import pytest
 
 import kustomize
 

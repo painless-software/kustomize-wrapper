@@ -3,10 +3,10 @@ Tests for the download helper module
 """
 import pathlib
 import platform
+from unittest.mock import call, patch
+
 import pytest
 import responses
-
-from unittest.mock import call, patch
 
 import kustomize
 

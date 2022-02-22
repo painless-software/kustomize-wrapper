@@ -1,11 +1,11 @@
 """
 Tests for the version command module
 """
-import pytest
-
-from cli_test_helpers import ArgvContext
 from platform import python_version
 from unittest.mock import call, patch
+
+import pytest
+from cli_test_helpers import ArgvContext
 
 import kustomize
 
