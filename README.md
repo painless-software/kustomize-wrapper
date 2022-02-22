@@ -25,11 +25,11 @@ Kustomize Wrapper [![latest-version](
 A Python wrapper for the Kubernetes [Kustomize](https://kustomize.io/) tool
 and related tooling.
 
-- More readable, more concise one-liners
-- Easy linting (with integrated `kubeval`)
-- Integrates into your Python tooling (e.g. use it with `tox`)
-- Automatic download of external Go binaries
-- Cross-platform (installs matching Go binaries on Linux, macOS, Windows)
+  - More readable, more concise one-liners
+  - Easy linting (with integrated `kubeval`)
+  - Integrates into your Python tooling (e.g. use it with `tox`)
+  - Automatic download of external Go binaries
+  - Cross-platform (installs matching Go binaries on Linux, macOS, Windows)
 
 Installation
 ------------
@@ -38,8 +38,8 @@ Installation
 python3 -m pip install kustomize-wrapper
 ```
 
-Why should I use this tool?
----------------------------
+Why should I use this tool
+--------------------------
 
 Forget about several `kustomize` calls, piping your calls into `kubeval`
 or `kubectl apply` commands. Using Kustomize is now even more pleasant!
@@ -85,9 +85,9 @@ kustomize --help
 
 Philosophy:
 
-- Build automatically
-- Kustomize commands become CLI options
-- Kubeval options become CLI options of `lint` command
+  - Build automatically
+  - Kustomize commands become CLI options
+  - Kubeval options become CLI options of `lint` command
 
 ### Python tox
 

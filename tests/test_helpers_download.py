@@ -114,7 +114,7 @@ def test_fail_gracefully(
     with pytest.raises(KeyboardInterrupt):
         dl.download()
 
-    args, kwargs = mock_systemexit.call_args
+    args, _ = mock_systemexit.call_args
     assert args[0].startswith("Extracting binary failed:")
 
 
@@ -125,11 +125,14 @@ def test_update_binary_delete(mock_unlink, mock_downloader, mock_print):
     """
     Is deletion of local binary attempted before download?
     """
+    expected_path = kustomize.helpers.download.DOWNLOAD_PATH / 'foo'
+    expected_output = f"Go binary {expected_path} removed."
+
     kustomize.helpers.download.update_binary('foo')
 
-    mock_unlink.called, "Deletion is not attempted"
-    mock_print.mock_calls == [call('Go binary foo removed.')]
-    mock_downloader.called, "Download is not attempted"
+    assert mock_unlink.called, "Deletion is not attempted"
+    assert mock_print.mock_calls == [call(expected_output)]
+    assert mock_downloader.called, "Download is not attempted"
 
 
 @patch('builtins.print')

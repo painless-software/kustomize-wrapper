@@ -30,7 +30,7 @@ def test_fail_fast(mock_print, mock_binarypath):
             pytest.raises(SystemExit):
         kustomize.cli.main()
 
-    args, kwargs = mock_print.call_args
+    args, _ = mock_print.call_args
     assert args == ('Validation of your manifests FAILED.',)
 
 
