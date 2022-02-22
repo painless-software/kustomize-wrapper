@@ -10,7 +10,7 @@ from .commands import version as version_command
 
 
 @click.group()
-@click.version_option()
+@click.version_option(package_name='kustomize-wrapper')
 def main():
     """Kustomize wrapper"""
 
