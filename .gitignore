@@ -1,6 +1,7 @@
 /.coverage
 /.tox/
 /build/
+/coverage.xml
 /dist/
 /kustomize-wrapper-*/
 /*.egg-info/

@@ -1,6 +1,11 @@
 """
 Tests for the version command module
 """
+try:
+    from importlib import metadata
+except ImportError:
+    import importlib_metadata as metadata
+
 from platform import python_version
 from unittest.mock import call, patch
 
@@ -42,12 +47,13 @@ def test_explain_when_missing(mock_binaryexists, mock_print):
     """
     Do we explain that binaries are not available?
     """
-    version = python_version()
+    pkg_version = metadata.version("kustomize_wrapper")
+    py_version = python_version()
 
     kustomize.commands.version.version()
 
     assert mock_print.mock_calls == [
-        call(f"kustomize-wrapper {kustomize.__version__} (Python {version})"),
+        call(f"kustomize-wrapper {pkg_version} (Python {py_version})"),
         call("Go binary 'kustomize' not available. Use --update to download."),
         call("Go binary 'kubeval' not available. Use --update to download."),
     ]

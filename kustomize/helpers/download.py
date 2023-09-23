@@ -1,12 +1,12 @@
 """
 Helper class to download external binaries
 """
+import os
 import platform
-
+import sys
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-import sys
 import requests
 
 from .archive import unpack_archive
@@ -65,13 +65,14 @@ class GithubReleases:
 
     def fetch_archive(self):
         """Fetch the release archive from GitHub"""
-        response = requests.get(self.download_url)
+        response = requests.get(self.download_url, timeout=240)  # seconds
         filename = self.download_url.split('/')[-1]
         try:
             with NamedTemporaryFile(suffix=filename, delete=False) as archive:
                 archive.write(response.content)
         except OSError as err:
-            raise SystemExit(f"Download failed: {err}") from err
+            msg = f"Download failed: {err}"
+            raise SystemExit(msg) from err
         return archive
 
     def extract_binary(self, archive):
@@ -79,8 +80,9 @@ class GithubReleases:
         try:
             unpack_archive(archive.name, DOWNLOAD_PATH, self.binary)
         except Exception as err:
-            raise SystemExit(f"Extracting binary failed: {err}\n"
-                             "Try installing in --user space.") from err
+            msg = f"Extracting binary failed: {err}{os.linesep}"
+            msg += "Try installing in --user space."
+            raise SystemExit(msg) from err
 
 
 def update_binary(command):

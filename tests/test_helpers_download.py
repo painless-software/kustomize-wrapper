@@ -85,7 +85,7 @@ def test_download(mock_tempfile, mock_unpackarchive):
     dl.download()
 
     args, kwargs = mock_tempfile.call_args
-    assert kwargs == dict(suffix=dl_archive, delete=False), \
+    assert kwargs == {"suffix": dl_archive, "delete": False}, \
         "Download of archive not attempted correctly"
 
     args, kwargs = mock_unpackarchive.call_args

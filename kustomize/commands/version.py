@@ -1,16 +1,21 @@
 """
 Supply version information of all components
 """
+try:
+    from importlib import metadata
+except ImportError:
+    import importlib_metadata as metadata
+
 from platform import python_version
 
-from .. import __version__
 from ..helpers.binaries import binarypath, run_piped_commands
 from ..helpers.download import update_binary
 
 
 def version(update=False):
     """Show version of all shipped components"""
-    print(f"kustomize-wrapper {__version__} (Python {python_version()})")
+    package_version = metadata.version("kustomize_wrapper")
+    print(f"kustomize-wrapper {package_version} (Python {python_version()})")
 
     if update:
         update_binary('kustomize')

@@ -8,6 +8,10 @@ on:
     branches:
     - main
 
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: '1'
+  PY_COLORS: '1'
+
 jobs:
   build:
     runs-on: ${{ matrix.platform }}
@@ -19,22 +23,25 @@ jobs:
         - macos-latest
         - windows-latest
         python-version:
-        - '3.6'
         - '3.7'
         - '3.8'
         - '3.9'
-        - pypy-3.7
+        - '3.10'
+        - '3.11'
+        - pypy-3.8
+        - pypy-3.9
+        - pypy-3.10
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install prerequisites
-      run: python -m pip install --upgrade setuptools pip wheel tox-gh-actions
+      run: python -m pip install wheel tox
     - name: Run tests
-      run: tox
+      run: tox run -e py
     - name: Upload coverage report
       uses: codacy/codacy-coverage-reporter-action@master
       with:
         project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        coverage-reports: tests/coverage-report.xml
+        coverage-reports: coverage.xml
