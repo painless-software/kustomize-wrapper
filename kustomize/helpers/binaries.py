@@ -5,9 +5,8 @@ import errno
 import os
 import shutil
 import sys
-
 from pathlib import Path
-from subprocess import CalledProcessError, CompletedProcess, PIPE, run
+from subprocess import PIPE, CalledProcessError, CompletedProcess, run
 
 from .download import DOWNLOAD_PATH, GithubReleases
 

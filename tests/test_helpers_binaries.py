@@ -34,9 +34,11 @@ def test_run_piped_commands(mock_run):
     Is list of commands properly executed as a pipe?
     """
     command_list = ['foo abc', 'bar -v', 'baz']
+    expected_calls = len(command_list)
+
     kustomize.helpers.binaries.run_piped_commands(command_list)
 
-    assert len(mock_run.mock_calls) == 3, \
+    assert len(mock_run.mock_calls) == expected_calls, \
         f"run() not called for each command in '{' | '.join(command_list)}'"
 
 
