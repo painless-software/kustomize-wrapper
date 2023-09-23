@@ -53,7 +53,8 @@ extend-ignore = ["TID252"]
 
 [tool.ruff.per-file-ignores]
 "tests/**/*.py" = ["COM812", "S101"]
-"kustomize/helpers/download.py" = ["E501"]
+"kustomize/helpers/binaries.py" = ["S603"]
+"kustomize/helpers/download.py" = ["BLE001", "E501"]
 
 [tool.pytest.ini_options]
 addopts = "--junitxml=tests/unittests-report.xml --doctest-modules --color=yes --verbose"

@@ -15,18 +15,19 @@ def test_binary_versions_in_readme():
     """
     Have the binary version badges been updated in the README?
     """
+    expected_occurrences_kubeval = 2
+    expected_occurrences_kustomize = 2
+
     project_readme = pathlib.Path(__file__).parent.parent / 'README.md'
-    kubeval_version = \
-        kustomize.helpers.download.GithubReleases('kubeval').version
-    kustomize_version = \
-        kustomize.helpers.download.GithubReleases('kustomize').version
+    kubeval_version = kustomize.helpers.download.GithubReleases('kubeval').version
+    kustomize_version = kustomize.helpers.download.GithubReleases('kustomize').version
 
     with project_readme.open() as document:
         readme = document.read()
 
-    assert readme.count(kubeval_version) == 2, \
+    assert readme.count(kubeval_version) == expected_occurrences_kubeval, \
         f"README badge doesn't match Kubeval version {kubeval_version}"
-    assert readme.count(kustomize_version) == 2, \
+    assert readme.count(kustomize_version) == expected_occurrences_kustomize, \
         f"README badge doesn't match Kustomize version {kustomize_version}"
 
 
