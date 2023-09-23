@@ -1,6 +1,11 @@
 """
 Tests for command line interface (CLI)
 """
+try:
+    from importlib import metadata
+except ImportError:
+    import importlib_metadata as metadata
+
 import os
 
 import pytest
@@ -77,7 +82,8 @@ def test_version_option():
     """
     Does --version yield a proper value?
     """
-    expected_output = f"kustomize, version {kustomize.__version__}{os.linesep}"
+    package_version = metadata.version("kustomize_wrapper")
+    expected_output = f"kustomize, version {package_version}{os.linesep}"
 
     result = shell('kustomize --version')
     assert result.stdout == expected_output
@@ -106,4 +112,3 @@ def test_cli():
     """
     with pytest.raises(SystemExit):
         kustomize.cli.main()
-        pytest.fail("CLI doesn't abort asking for a command argument")

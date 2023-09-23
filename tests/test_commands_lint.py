@@ -40,6 +40,8 @@ def test_uses_shell(mock_shell, mock_binarypath):
     """
     Does command use the shell function to run commands?
     """
+    expected_calls = 3
+
     with pytest.raises(SystemExit):
         kustomize.commands.lint.lint(['foo', 'bar', 'baz'],
                                      edit=None,
@@ -52,5 +54,5 @@ def test_uses_shell(mock_shell, mock_binarypath):
         call('kubeval', download_if_missing=True),
     ], "We don't ensure all binaries are available"
 
-    assert mock_shell.call_count == 3, \
+    assert mock_shell.call_count == expected_calls, \
         "Should call shell() function 3 times"

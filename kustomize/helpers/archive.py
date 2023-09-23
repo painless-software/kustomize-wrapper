@@ -23,8 +23,8 @@ def unpack_archive(filename, extract_dir, *files):
     try:
         archive_method[filetype](filename, extract_dir, *files)
     except KeyError as err:
-        raise NotImplementedError(f"Archive not supported: {filetype}") \
-            from err
+        msg = f"Archive not supported: {filetype}"
+        raise NotImplementedError(msg) from err
 
 
 def unpack_tar_archive(filename, extract_dir, *files):
@@ -52,7 +52,8 @@ def get_file_extension(filename):
     >>> get_file_extension("/opt/2020.12.31_windows.1.007.zip")
     '.zip'
     """
+    min_len, max_len = 3, 4
     ext_list = pathlib.Path(filename).suffixes
     good_exts = [_ for _ in ext_list[-2:]
-                 if 3 <= len(_) <= 4 and _[1:].isalpha()]
+                 if min_len <= len(_) <= max_len and _[1:].isalpha()]
     return ''.join(good_exts)
