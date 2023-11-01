@@ -22,12 +22,12 @@ BINARY_INFO = {
         },
     },
     'kustomize': {
-        'version': 'v4.5.2',
+        'version': 'v5.2.1',
         'repo': 'https://github.com/kubernetes-sigs/kustomize',
         'archive': {
             'linux': '%(name)s/%(version)s/%(name)s_%(version)s_%(platform)s_amd64.tar.gz',
             'darwin': '%(name)s/%(version)s/%(name)s_%(version)s_%(platform)s_amd64.tar.gz',
-            'windows': '%(name)s/%(version)s/%(name)s_%(version)s_%(platform)s_amd64.tar.gz',
+            'windows': '%(name)s/%(version)s/%(name)s_%(version)s_%(platform)s_amd64.zip',
         },
     },
 }
