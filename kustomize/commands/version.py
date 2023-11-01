@@ -26,7 +26,7 @@ def version(update=False):
         kustomize_result = run_piped_commands(
             [f"{kustomize_binary} version"])
 
-        ver = kustomize_result.stdout.split()[0].split('/v')[1]
+        ver = kustomize_result.stdout.split()[0].split('v')[1]
         print(f"Kustomize {ver} ({kustomize_binary})")
     except FileNotFoundError:
         print("Go binary 'kustomize' not available."
