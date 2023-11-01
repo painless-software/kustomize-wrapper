@@ -4,10 +4,10 @@ Kustomize Wrapper [![latest-version](
 =================
 
 [![checks-status](
-  https://img.shields.io/github/workflow/status/painless-software/kustomize-wrapper/Checks/main?label=Checks&logo=github)](
+  https://github.com/painless-software/kustomize-wrapper/actions/workflows/checks.yml/badge.svg)](
   https://github.com/painless-software/kustomize-wrapper/actions/workflows/checks.yml)
 [![tests-status](
-  https://img.shields.io/github/workflow/status/painless-software/kustomize-wrapper/Tests/main?label=Tests&logo=github)](
+  https://github.com/painless-software/kustomize-wrapper/actions/workflows/tests.yml/badge.svg)](
   https://github.com/painless-software/kustomize-wrapper/actions/workflows/tests.yml)
 [![kustomize](
   https://img.shields.io/badge/kustomize-v5.2.1-5d8bee.svg?logo=kubernetes)](
